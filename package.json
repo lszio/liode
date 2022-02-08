@@ -1,0 +1,22 @@
+{
+  "name": "@inode/root",
+  "private": "true",
+  "version": "0.0.0",
+  "description": "lszio's node",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react",
+    "solid"
+  ],
+  "author": {
+    "name": "lszio",
+    "email": "lszio@qq.com"
+  },
+  "repository": {
+    "type": "https",
+    "ur": "https://github.com/lszio/inold"
+  },
+  "workspaces": ["configs/*", "modules/*"]
+}
