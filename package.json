@@ -1,5 +1,5 @@
 {
-  "name": "fliya",
+  "name": "eliya",
   "version": "0.0.0",
   "description": "Liszt21's frontend project",
   "main": "index.js",
@@ -10,5 +10,12 @@
   "keywords": [
     "react"
   ],
-  "author": "Liszt21"
+  "author": {
+    "name": "Liszt21",
+    "email": "liszt21@qq.com"
+  },
+  "repository": {
+    "type": "https",
+    "url": "https://github.com/Liszt21/Fliya"
+  }
 }

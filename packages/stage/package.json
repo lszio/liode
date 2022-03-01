@@ -1,5 +1,5 @@
 {
-  "name": "stage",
+  "name": "@eliya/stage",
   "private": true,
   "version": "0.0.0",
   "scripts": {
@@ -24,5 +24,13 @@
     "vite": "^2.8.0",
     "vue-loader": "^16.8.3",
     "vue-tsc": "^0.29.8"
+  },
+  "author": {
+    "name": "Liszt21",
+    "email": "liszt21@qq.com"
+  },
+  "repository": {
+    "type": "https",
+    "url": "https://github.com/Liszt21/Fliya"
   }
 }
