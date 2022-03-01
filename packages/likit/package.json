@@ -1,0 +1,32 @@
+{
+  "name": "@fliya/likit",
+  "version": "0.0.0",
+  "author": {
+    "name": "Liszt21",
+    "email": "liszt21@qq.com"
+  },
+  "repository": {
+    "type": "https",
+    "url": "https://github.com/Liszt21/Fliya"
+  },
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/src/likit.d.ts",
+  "main": "./dist/likit.umd.js",
+  "module": "./dist/likit.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/likit.es.js",
+      "require": "./dist/likit.umd.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc && vite build"
+  },
+  "devDependencies": {
+    "typescript": "^4.5.4",
+    "vite": "^2.8.0",
+    "vite-plugin-dts": "^0.9.9"
+  }
+}
