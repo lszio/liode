@@ -1,0 +1,12 @@
+;; shadow-cljs configuration
+{:source-paths
+ ["src"
+  "test"]
+
+ :dependencies
+ []
+
+ :builds
+ {:cljskit {:target :npm-module
+            :output-dir "target"
+            :entries [cljskit]}}}
