@@ -4,7 +4,6 @@
   "devDependencies": {
     "shadow-cljs": "2.17.5"
   },
-  "dependencies": {},
   "author": {
     "name": "Liszt21",
     "email": "liszt21@qq.com"
@@ -22,9 +21,9 @@
     }
   },
   "scripts": {
-    "watch": "shadow-cljs watch cljskit",
-    "build": "shadow-cljs compile cljskit",
-    "release": "shadow-cljs release cljskit"
+    "watch": "shadow-cljs watch main",
+    "build": "shadow-cljs compile main",
+    "release": "shadow-cljs release main"
   },
   "repository": {
     "type": "https",

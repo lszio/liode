@@ -7,6 +7,13 @@
  []
 
  :builds
- {:cljskit {:target :npm-module
-            :output-dir "target"
-            :entries [cljskit]}}}
+ {
+  :esm {:target :esm
+        :output-dir "dist"
+        :modules {:cljskit  {:entries [cljskit]}}}
+  :main {:target :node-library
+            :output-to "./dist/cljskit.js"
+            :exports-fn cljskit/generate-exports }
+  :module {:target :npm-module
+           :output-dir "dist"
+           :entries [cljskit]}}}
