@@ -1,0 +1,33 @@
+{
+  "name": "@eliya/cljskit",
+  "version": "0.0.0",
+  "devDependencies": {
+    "shadow-cljs": "2.17.5"
+  },
+  "dependencies": {},
+  "author": {
+    "name": "Liszt21",
+    "email": "liszt21@qq.com"
+  },
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/src/cljskit.d.ts",
+  "main": "./dist/cljskit.js",
+  "module": "./dist/cljskit.js",
+  "exports": {
+    ".": {
+      "import": "./dist/cljskit.js",
+      "require": "./dist/cljskit.js"
+    }
+  },
+  "scripts": {
+    "watch": "shadow-cljs watch cljskit",
+    "build": "shadow-cljs compile cljskit",
+    "release": "shadow-cljs release cljskit"
+  },
+  "repository": {
+    "type": "https",
+    "url": "https://github.com/Liszt21/Eliya"
+  }
+}

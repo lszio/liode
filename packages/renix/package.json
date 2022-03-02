@@ -10,6 +10,7 @@
     "start": "remix-serve build"
   },
   "dependencies": {
+    "@eliya/cljskit": "workspace:^0.0.0",
     "@eliya/likit": "workspace:^0.0.0",
     "@remix-run/react": "^1.1.3",
     "@remix-run/serve": "^1.1.3",
@@ -33,6 +34,6 @@
   },
   "repository": {
     "type": "https",
-    "url": "https://github.com/Liszt21/Fliya"
+    "url": "https://github.com/Liszt21/Eliya"
   }
 }
