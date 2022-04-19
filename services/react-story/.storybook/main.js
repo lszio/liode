@@ -1,5 +1,12 @@
+const path = require("path");
+const root = path.resolve(__dirname, "../../..");
+
 module.exports = {
   "stories": [
+    `${root}/*/*/src/**/*.stories.mdx`,
+    `${root}/*/*/src/**/*.stories.@(js|jsx|ts|tsx)`,
+    `${root}/*/*/*.stories.mdx`,
+    `${root}/*/*/*.stories.@(js|jsx|ts|tsx)`,
     "../src/**/*.stories.mdx",
     "../src/**/*.stories.@(js|jsx|ts|tsx)"
   ],
