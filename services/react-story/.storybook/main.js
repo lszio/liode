@@ -1,19 +1,22 @@
 const path = require("path");
 const root = path.resolve(__dirname, "../../..");
+const glob = require("glob");
+
+const mdxFiles = glob.sync(`${root}/**/*.stories.mdx`).filter(file => !file.match("node_modules"))
+
+console.log(mdxFiles)
 
 module.exports = {
   "stories": [
-    `${root}/*/*/src/**/*.stories.mdx`,
-    `${root}/*/*/src/**/*.stories.@(js|jsx|ts|tsx)`,
-    `${root}/*/*/*.stories.mdx`,
-    `${root}/*/*/*.stories.@(js|jsx|ts|tsx)`,
+    ...mdxFiles,
+    `${root}/packages/**/*.stories.@(js|jsx|ts|tsx)`,
     "../src/**/*.stories.mdx",
     "../src/**/*.stories.@(js|jsx|ts|tsx)"
   ],
   "addons": [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
-    "@storybook/addon-interactions"
+    "@storybook/addon-interactions",
   ],
   "framework": "@storybook/react",
   "core": {
@@ -22,7 +25,7 @@ module.exports = {
   features: {
     storyStoreV7: true
   },
-  async viteFinal(config, {configType}) {
+  async viteFinal(config, { configType }) {
     return config;
   }
 }
