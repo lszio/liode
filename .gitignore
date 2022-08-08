@@ -3,5 +3,9 @@ node_modules
 
 .lsp
 .clj-kondo
+.turbo
 
 out
+build/**
+dist/**
+.next/**

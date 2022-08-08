@@ -4,7 +4,10 @@
   "description": "Liszt21's frontend project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "dev": "turbo run dev",
     "storybook": "pnpm --filter @service/react-story storybook "
   },
   "keywords": [
@@ -17,5 +20,8 @@
   "repository": {
     "type": "https",
     "url": "https://github.com/Liszt21/Eliya"
+  },
+  "devDependencies": {
+    "turbo": "^1.4.2"
   }
 }
