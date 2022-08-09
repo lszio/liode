@@ -16,14 +16,6 @@ export default defineConfig(({ }) => {
         name: "likit",
         fileName: (format) => `likit.${format}.js`,
       },
-      rollupOptions: {
-        external: ["vue"],
-        output: {
-          globals: {
-            vue: "Vue",
-          },
-        },
-      },
     },
     plugins: [dts()]
   };

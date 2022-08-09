@@ -1,6 +1,7 @@
 const path = require("path");
 const root = path.resolve(__dirname, "../../..");
 const glob = require("glob");
+const { vanillaExtractPlugin } = require("@vanilla-extract/vite-plugin");
 
 const mdxFiles = glob.sync(`${root}/**/*.stories.mdx`).filter(file => !file.match("node_modules"))
 
@@ -8,7 +9,8 @@ console.log(mdxFiles)
 
 module.exports = {
   "stories": [
-    ...mdxFiles,
+    // ...mdxFiles,
+    `${root}/packages/**/*.stories.mdx`,
     `${root}/packages/**/*.stories.@(js|jsx|ts|tsx)`,
     "../src/**/*.stories.mdx",
     "../src/**/*.stories.@(js|jsx|ts|tsx)"
@@ -26,6 +28,7 @@ module.exports = {
     storyStoreV7: true
   },
   async viteFinal(config, { configType }) {
+    config.plugins.push(vanillaExtractPlugin());
     return config;
   }
 }
