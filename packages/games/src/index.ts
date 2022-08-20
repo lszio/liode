@@ -1,1 +1,1 @@
-export * from "./ReactionSpeed"
+export * from "./ReactionSpeed";
