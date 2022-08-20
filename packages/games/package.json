@@ -2,7 +2,6 @@
   "name": "@eliya/games",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "files": [
     "dist"
   ],
@@ -12,7 +11,8 @@
     ".": {
       "import": "./dist/index.es.js",
       "require": "./dist/index.umd.js"
-    }
+    },
+    "./style.css": "./dist/style.css"
   },
   "scripts": {
     "dev": "vite",

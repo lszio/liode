@@ -6,4 +6,4 @@ export default {
   component:Game,
 };
 
-export const Primary = () => <div style={{height: "calc(100vh - 40px)"}}> <Game /></div>;
+export const Primary = () => <Game  style={{height: "calc(100vh - 40px)"}} />;

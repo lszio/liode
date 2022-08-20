@@ -9,7 +9,7 @@ enum Phase {
   DONE
 }
 
-export default function ReactionSpeed() {
+export function ReactionSpeed({ style }: { style: React.CSSProperties }) {
   const [phase, setPhase] = useState(Phase.WAIT);
   const [time, setTime] = useState(+new Date());
   const [records, setRecords] = useState<Record<string, number>[]>([]);
@@ -87,7 +87,7 @@ export default function ReactionSpeed() {
   };
 
   return (
-    <section className={Container} onClick={handleClickPadding}>
+    <section className={Container} onClick={handleClickPadding} style={style}>
       <div className={Box + " " + classMapper[phase]} onClick={handleClickBox}>
         <span>
           {content}
@@ -99,3 +99,5 @@ export default function ReactionSpeed() {
     </section>
   );
 }
+
+export default ReactionSpeed;
