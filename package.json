@@ -4,11 +4,11 @@
   "description": "Liszt21's frontend project",
   "main": "index.js",
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run build --filter=!@service/react-story",
     "test": "turbo run test",
     "lint": "turbo run lint",
     "dev": "turbo run dev",
-    "storybook": "pnpm --filter @service/react-story storybook "
+    "storybook": "pnpm --filter @service/react-story storybook"
   },
   "keywords": [
     "react"
