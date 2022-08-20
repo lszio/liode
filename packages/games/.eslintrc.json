@@ -6,6 +6,7 @@
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
     "plugin:@typescript-eslint/recommended"
   ],
   "overrides": [],
@@ -41,5 +42,13 @@
       "error",
       "always"
     ]
+  },
+  "ignorePatterns": [
+    "*.stories.*"
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }
