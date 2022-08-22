@@ -8,6 +8,7 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import tailwindcss from "./styles/tailwind.css";
+import { Layout } from "./layout";
 
 export function links() {
   return [{ rel: "stylesheet", href: tailwindcss }]
@@ -15,7 +16,7 @@ export function links() {
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: "New Remix App",
+  title: "Renix",
   viewport: "width=device-width,initial-scale=1",
 });
 
@@ -26,8 +27,10 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="font-bold">
-        <Outlet />
+      <body>
+        <Layout >
+          <Outlet />
+        </Layout>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

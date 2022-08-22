@@ -75,6 +75,7 @@ importers:
       postcss: ^8.4.16
       react: ^18.2.0
       react-dom: ^18.2.0
+      react-icons: ^4.4.0
       tailwindcss: ^3.1.8
       typescript: ^4.7.4
     dependencies:
@@ -84,6 +85,7 @@ importers:
       '@remix-run/serve': 1.6.8_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      react-icons: 4.4.0_react@18.2.0
     devDependencies:
       '@remix-run/dev': 1.6.8_cgxlqhaetfbjollwaaytbbpdmu
       '@remix-run/eslint-config': 1.6.8_o3mauctgtumsl5j4kwehbgms54
@@ -12075,6 +12077,14 @@ packages:
       react-dom: 18.2.0_react@18.2.0
       react-is: 17.0.2
     dev: true
+
+  /react-icons/4.4.0_react@18.2.0:
+    resolution: {integrity: sha512-fSbvHeVYo/B5/L4VhB7sBA1i2tS8MkT0Hb9t2H1AVPkwGfVHLJCqyr2Py9dKMxsyM63Eng1GkdZfbWj+Fmv8Rg==}
+    peerDependencies:
+      react: '*'
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /react-inspector/5.1.1_react@18.2.0:
     resolution: {integrity: sha512-GURDaYzoLbW8pMGXwYPDBIv6nqei4kK7LPRZ9q9HCZF54wqXz/dnylBp/kfE9XmekBhHvLDdcYeyIwSrvtOiWg==}
