@@ -1,0 +1,14 @@
+#simple-demo {
+    color: red;
+}
+
+.zoome-viewer {
+    width: 300px;
+    height: 300px;
+    overflow: hidden;
+    position: absolute;
+    float: right;
+    right: 0;
+    top:0;
+    background-color: rgba(50,50,50,0.2)
+}
