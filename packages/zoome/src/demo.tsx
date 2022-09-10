@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import Zoome from "./index"
+import Zoome, { SVGZoome } from "./index"
 import styled from "styled-components"
 
 export const SimpleDemo = (props: any) => {
@@ -7,15 +7,8 @@ export const SimpleDemo = (props: any) => {
 
   return (
     <div className="simple-demo" {...props} >
-      {/* <h1>SimpleDemo</h1> */}
       <button onClick={() => setCount(c => c + 1)}>count + 1</button>
       <h2>{count}</h2>
-      {/* <ol>
-        <li>1</li>
-        <li>2</li>
-        <li>3</li>
-        <li>4</li>
-      </ol> */}
     </div>)
 }
 
@@ -28,7 +21,7 @@ export const SVGDemo = (props: any) => {
       clearInterval(timeInterval);
     }
   })
-  return <svg className="svg-demo" width="300" height="300" {...props}>
+  return <svg className="svg-demo" width="300" height="300"  {...props}>
     <text x="50" y="50" fill="red">{time.toLocaleTimeString()}</text>
     <circle cx="100" cy="100" r="40" stroke="green" stroke-width="4" fill="yellow" />
     <rect width="300" height="300" style={{ fill: "rgba(0,0,0,0.1)", strokeWidth: 1, stroke: "black" }} />
@@ -77,7 +70,7 @@ export const SimpleDemoWrapper = (props: any) => {
 export const SVGDemoWrapper = (props: any) => {
   useEffect(() => {
     const source = document.getElementById(props.id || "svg-demo")
-    const zoome = new Zoome({
+    const zoome = new SVGZoome({
       name: "simple-demo",
       source,
       container: document.getElementById("simple-demo-wrapper"),
@@ -88,8 +81,8 @@ export const SVGDemoWrapper = (props: any) => {
     }
   })
   return (
-    <div className="svg-demo-wrapper">
+    <SimpleDemoContainer className="svg-demo-wrapper">
       <SVGDemo id="svg-demo" {...props} />
-    </div>
+    </SimpleDemoContainer>
   )
 }

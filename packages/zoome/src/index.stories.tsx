@@ -26,7 +26,7 @@ export const DoubleSvg = () => <SVGDemoWrapper matrix={{ scaleX: 2, scaleY: 2 }}
 
 export const HalfSvg = () =>
   <SVGDemoWrapper
-    style={{ transform: "scale(3) translate(10px, 10px)" }}
+    transform="translate(20px, 20px) scale(2)"
     matrix={{ scaleX: 0.5, scaleY: 0.5 }}
     mode="zoomout"
   />;

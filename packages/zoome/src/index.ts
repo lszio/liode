@@ -102,9 +102,9 @@ export default class Zoome {
       const transform = `translate(${translateX}px, ${translateY}px) scale(${scaleX}, ${scaleY})`
       this.cloned.style.transform = transform
 
-      if (this.zoominp) {
-      } else if (this.zoomoutp) {
-      } else { }
+      // if (this.zoominp) {
+      // } else if (this.zoomoutp) {
+      // } else { }
     }
   }
 
@@ -175,9 +175,6 @@ export default class Zoome {
         const { scaleX: vX, scaleY: vY } = this.matrix
 
         this.source!.style.transform = `translate(${translateX - dx * sX / vX}px,${translateY - dy * sY / vY}px)scale(${sX},${sY})`
-
-        console.log(sX, vX, sY, vY, translateX, translateY)
-
       }
     })
 
@@ -243,6 +240,6 @@ export default class Zoome {
   }
 }
 
-export class SGVZoome extends Zoome {
+export class SVGZoome extends Zoome {
 
 }
