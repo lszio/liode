@@ -1,8 +1,27 @@
 {
-  "name": "zoome",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@eliya/zoome",
+  "version": "0.0.1",
   "type": "module",
+  "author": {
+    "name": "Liszt21",
+    "email": "liszt21@qq.com"
+  },
+  "repository": {
+    "type": "https",
+    "url": "https://github.com/Liszt21/Eliya"
+  },
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js"
+    }
+  },
   "scripts": {
     "test": "vitest",
     "coverage": "vitest run --coverage",
