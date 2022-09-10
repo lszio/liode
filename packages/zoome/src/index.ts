@@ -24,8 +24,8 @@ export default class Zoome {
   protected _source: HTMLElement | null = null;
   protected _matrix: Matrix = { scaleX: 1, scaleY: 1, translateX: 0, translateY: 0 };
   protected _cloned: HTMLElement | null = null;
+  protected _mode: ZoomeMode = ZoomeMode.ZOOMIN;
   name: string;
-  mode: ZoomeMode;
   viewer: HTMLElement;
   viewBlock: HTMLElement | null = null;
   container: HTMLElement;
@@ -33,12 +33,13 @@ export default class Zoome {
 
   constructor({ name, source, viewer, container, matrix, mode = ZoomeMode.ZOOMIN }: ZoomeConfig) {
     this.name = name || "zoome";
-    this.mode = mode || ZoomeMode.ZOOMIN;
     this.viewer = viewer || this.createViewerElement();
+    this.viewBlock = this.createViewBlock();
+    this.mode = mode || ZoomeMode.ZOOMIN;
+
     this.container = container || document.body;
     this.container.appendChild(this.viewer);
     this.observer = new MutationObserver((ms) => this.handleSourceMutated(ms))
-    this.viewBlock = this.createViewBlock();
     this.matrix = { ...this._matrix, ...matrix }
     this.source = source;
   }
@@ -79,8 +80,18 @@ export default class Zoome {
   get matrix() { return this._matrix; }
   get source() { return this._source; }
   get cloned() { return this._cloned; }
+  get mode() { return this._mode; }
   get zoominp() { return this.mode === ZoomeMode.ZOOMIN }
   get zoomoutp() { return this.mode === ZoomeMode.ZOOMOUT }
+
+  set mode(mode: ZoomeMode) {
+    this._mode = mode;
+    if (this.zoominp && this.viewBlock) {
+      this.viewBlock.style.display = "none";
+    } else if (this.zoomoutp && this.viewBlock) {
+      this.viewBlock.style.display = "block"
+    }
+  }
 
   set matrix(matrix: Matrix) {
     this._matrix = { ...this._matrix, ...matrix }
@@ -120,9 +131,7 @@ export default class Zoome {
       this.viewer.appendChild(cloned)
       cloned.style.transformOrigin = "top left"
       console.log(`zoome: ${this.name}: cloned updated`)
-    } else {
-
-    }
+    } else { }
     this._cloned = cloned;
   }
 
@@ -132,6 +141,50 @@ export default class Zoome {
     viewBlock.id = this.name + "-zoome-view-block";
     viewBlock.style.border = "1px solid black";
     viewBlock.style.position = "absolute"
+    viewBlock.style.boxSizing = "border-box"
+    viewBlock.style.zIndex = "100"
+
+    const cache: any = { dragging: false }
+
+    viewBlock.addEventListener("mouseover", () => {
+      viewBlock.style.backgroundColor = "rgba(0,0,0,0.2)"
+    })
+
+    viewBlock.addEventListener("mouseout", () => {
+      viewBlock.style.backgroundColor = "rgba(0,0,0,0)"
+      cache.dragging = false;
+      viewBlock.classList.remove("zoome-view-block-moving")
+    })
+
+    viewBlock.addEventListener("mousedown", (e: MouseEvent) => {
+      cache.dragging = true;
+      viewBlock.classList.add("zoome-view-block-moving")
+      cache.x = e.clientX
+      cache.y = e.clientY
+    })
+
+    viewBlock.addEventListener("mousemove", (e: MouseEvent) => {
+      if (cache.dragging) {
+        const dx = e.clientX - cache.x
+        const dy = e.clientY - cache.y
+
+        cache.x = e.clientX
+        cache.y = e.clientY
+
+        const { scaleX: sX, scaleY: sY, translateX, translateY } = this.getSourceTransform();
+        const { scaleX: vX, scaleY: vY } = this.matrix
+
+        this.source!.style.transform = `translate(${translateX - dx * sX / vX}px,${translateY - dy * sY / vY}px)scale(${sX},${sY})`
+
+        console.log(sX, vX, sY, vY, translateX, translateY)
+
+      }
+    })
+
+    viewBlock.addEventListener("mouseup", () => {
+      cache.dragging = false;
+      viewBlock.classList.remove("zoome-view-block-moving")
+    })
 
     this.viewer.appendChild(viewBlock)
     return viewBlock;
@@ -162,10 +215,18 @@ export default class Zoome {
       const scaleY = viewerRect.height / sourceRect.height * sourceMatrix.scaleY;
       const scale = Math.min(scaleX, scaleY);
       this.matrix = { ...this.matrix, scaleX: scale, scaleY: scale }
-      this.viewBlock.style.top = sourceRect.top / scale + ""
-      this.viewBlock.style.left = sourceRect.left / scale + ""
-      this.viewBlock.style.width = parentRect.width / scale + ""
-      this.viewBlock.style.height = parentRect.height / scale + ""
+      this.viewBlock.style.width = parentRect.width / scale + "px"
+      this.viewBlock.style.height = parentRect.height / scale + "px"
+
+      this.viewBlock.style.top = - sourceMatrix.translateY / sourceMatrix.scaleY * scale + "px"
+      this.viewBlock.style.left = - sourceMatrix.translateX / sourceMatrix.scaleX * scale + "px"
+
+      // const translateX = - sourceRect.left / sourceMatrix.scaleX / scale + "px"
+      // const translateY = - sourceRect.top / sourceMatrix.scaleY / scale + "px"
+      // this.viewBlock.style.left = - sourceRect.left / sourceMatrix.scaleX / scale + "px"
+      // this.viewBlock.style.transform = `translate(${translateX}px,${translateY}px)`
+      // this.viewBlock.style.top = "0px"
+      // this.viewBlock.style.left = "0px"
     } else if (this.zoominp) {
       this.matrix = this._matrix;
     }

@@ -38,6 +38,9 @@ export const SVGDemo = (props: any) => {
 const SimpleDemoContainer = styled.div`
   overflow: hidden;
   box-sizing: border-box;
+  border: 1px solid blue;
+  width: 200px;
+  height: 200px;
 
   .simple-demo {
     background-color: rgba(0,0,0,0.1);

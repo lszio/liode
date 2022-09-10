@@ -13,7 +13,7 @@ export const DoubleSimple = () => <SimpleDemoWrapper matrix={{ scaleX: 2, scaleY
 export const HalfSimple = () =>
   <SimpleDemoWrapper
     style={{
-      transform: "scale(2) translate(5px, 5px)",
+      transform: "translate(20px, 20px) scale(2) ",
       transformOrigin: "left top"
     }}
     matrix={{ scaleX: 0.5, scaleY: 0.5 }}
