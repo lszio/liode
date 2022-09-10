@@ -1,5 +1,4 @@
-import React from "react";
-import { SimpleDemoWrapper, SVGDemoWrapper } from "./demo.tsx"
+import { SimpleDemoWrapper, SVGDemoWrapper } from "./demo"
 import "./demo.css"
 
 export default {

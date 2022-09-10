@@ -23,11 +23,11 @@ export interface Matrix {
 export default class Zoome {
   protected _source: HTMLElement | null = null;
   protected _matrix: Matrix = { scaleX: 1, scaleY: 1, translateX: 0, translateY: 0 };
+  protected _cloned: HTMLElement | null = null;
   name: string;
   mode: ZoomeMode;
-  cloned: HTMLElement | null = null;
-  viewBlock: HTMLElement | null = null;
   viewer: HTMLElement;
+  viewBlock: HTMLElement | null = null;
   container: HTMLElement;
   observer: MutationObserver;
 
@@ -76,6 +76,11 @@ export default class Zoome {
     return { scaleX: 1, scaleY: 1, translateX: 0, translateY: 0 }
   }
 
+  get matrix() { return this._matrix; }
+  get source() { return this._source; }
+  get cloned() { return this._cloned; }
+  get zoominp() { return this.mode === ZoomeMode.ZOOMIN }
+  get zoomoutp() { return this.mode === ZoomeMode.ZOOMOUT }
 
   set matrix(matrix: Matrix) {
     this._matrix = { ...this._matrix, ...matrix }
@@ -86,15 +91,11 @@ export default class Zoome {
       const transform = `translate(${translateX}px, ${translateY}px) scale(${scaleX}, ${scaleY})`
       this.cloned.style.transform = transform
 
-      if (this.mode === ZoomeMode.ZOOMIN) {
-      } else if (this.mode === ZoomeMode.ZOOMOUT) {
-      } else {
-        return;
-      }
+      if (this.zoominp) {
+      } else if (this.zoomoutp) {
+      } else { }
     }
   }
-
-  get matrix() { return this._matrix; }
 
   set source(source: HTMLElement | null) {
     if (this._source === source) {
@@ -110,8 +111,19 @@ export default class Zoome {
     console.info(`zoome: ${this.name}: update source element`)
   }
 
-  get source() {
-    return this._source
+  set cloned(cloned: HTMLElement | null) {
+    this._cloned && this.viewer.removeChild(this._cloned)
+    this._cloned = this.source?.cloneNode(true) as HTMLElement;
+    if (cloned) {
+      const id = cloned.id;
+      cloned.id = (this.name || id) + "-zoome-cloned"
+      this.viewer.appendChild(cloned)
+      cloned.style.transformOrigin = "top left"
+      console.log(`zoome: ${this.name}: cloned updated`)
+    } else {
+
+    }
+    this._cloned = cloned;
   }
 
   protected createViewBlock() {
@@ -125,28 +137,21 @@ export default class Zoome {
     return viewBlock;
   }
 
-  protected handleViewBlockPosition() {
-    if (this.viewBlock) {
-
-    }
-
-  }
-
   protected createViewerElement(): HTMLElement {
     const viewer = document.createElement("div");
     viewer.classList.add("zoome-viewer");
     return viewer;
   }
 
-  protected handleSourceMutated(mutations: MutationRecord[]) {
-    console.log(this.matrix)
-    console.log(mutations);
+  handleSourceMutated(mutations?: MutationRecord[]) {
+    // console.log(mutations);
     console.info(`zoome: ${this.name}: source changed`)
-    this.cloneSource();
     if (!this._source) {
       console.warn(`zoome: ${this.name}: source undefined`)
       return
     }
+
+    this.cloned = this._source.cloneNode(true) as HTMLElement;
 
     if (this.zoomoutp && this.viewBlock) {
       const sourceRect = this._source.getBoundingClientRect();
@@ -166,15 +171,6 @@ export default class Zoome {
     }
   }
 
-  protected cloneSource() {
-    this.cloned && this.viewer.removeChild(this.cloned)
-    this.cloned = this.source?.cloneNode(true) as HTMLElement;
-    const id = this.cloned.id;
-    this.cloned.id = id + "-zoome-cloned"
-    this.viewer.appendChild(this.cloned)
-    this.cloned.style.transformOrigin = "top left"
-  }
-
   status() {
     return { source: this.source, viewer: this.viewer, container: this.container, matrix: this.matrix }
   }
@@ -184,9 +180,6 @@ export default class Zoome {
     this.observer.disconnect();
     console.info(`destory zoome ${this.name}`)
   }
-
-  get zoominp() { return this.mode === ZoomeMode.ZOOMIN }
-  get zoomoutp() { return this.mode === ZoomeMode.ZOOMOUT }
 }
 
 export class SGVZoome extends Zoome {
