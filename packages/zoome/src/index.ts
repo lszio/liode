@@ -185,47 +185,13 @@ export default class Zoome<T extends Element> {
     viewBlock.style.zIndex = "100"
     viewBlock.style.backgroundColor = "rgba(0,0,0,0.1)"
 
-    const cache: any = { dragging: false }
-
     viewBlock.addEventListener("mouseover", () => {
       viewBlock.style.backgroundColor = "rgba(0,0,0,0.2)"
     })
 
     viewBlock.addEventListener("mouseout", () => {
-      viewBlock.style.backgroundColor = "rgba(0,0,0,0)"
-      cache.dragging = false;
-      viewBlock.classList.remove("zoome-view-block-moving")
-    })
-
-    viewBlock.addEventListener("mousedown", (e: MouseEvent) => {
-      cache.dragging = true;
-      viewBlock.classList.add("zoome-view-block-moving")
-      cache.x = e.clientX
-      cache.y = e.clientY
-    })
-
-    viewBlock.addEventListener("mousemove", (e: MouseEvent) => {
-      if (cache.dragging) {
-        this.cache.dragging = true;
-
-        const dx = e.clientX - cache.x
-        const dy = e.clientY - cache.y
-
-        cache.x = e.clientX
-        cache.y = e.clientY
-
-        const { scaleX: sX, scaleY: sY, translateX, translateY } = this.getSourceTransform();
-        const { scaleX: vX = 1, scaleY: vY = 1 } = this.matrix
-
-        this.handleChangeTransform({
-          scaleX: sX, scaleY: sY,
-          translateX: translateX - dx * sX / vX, translateY: translateY - dy * sY / vY
-        }, this._source)
-      }
-    })
-
-    viewBlock.addEventListener("mouseup", () => {
-      cache.dragging = false;
+      viewBlock.style.backgroundColor = "rgba(0,0,0,0.1)"
+      this.cache.dragging = false;
       viewBlock.classList.remove("zoome-view-block-moving")
     })
 
@@ -239,22 +205,53 @@ export default class Zoome<T extends Element> {
     viewer.id = "zoomer-viewer-" + this.name
     viewer.style.overflow = "hidden"
 
-    viewer.addEventListener("click", (e) => {
-      if (this.cache.dragging) {
-        this.cache.dragging = false
-        return;
+    viewer.addEventListener("mousedown", (e) => {
+      if (this.zoomoutp) {
+        const sT = this.getSourceTransform();
+        const vT = this.matrix;
+        const vR = this.viewer.getBoundingClientRect();
+        const { width, height } = this.viewBlock!.getBoundingClientRect();
+
+        const translateX = (vR.left - e.clientX + width / 2) * sT.scaleX / (vT.scaleX || 1)
+        const translateY = (vR.top - e.clientY + height / 2) * sT.scaleY / (vT.scaleY || 1)
+        this.handleChangeTransform({
+          ...sT,
+          translateX,
+          translateY
+        }, this._source)
+
+        this.cache.dragging = true;
+        this.cache.translateX = translateX
+        this.cache.translateY = translateY
+        this.cache.mouseX = e.clientX;
+        this.cache.mouseY = e.clientY;
       }
+    })
 
-      const sT = this.getSourceTransform();
-      const vT = this.matrix;
-      const vR = this.viewer.getBoundingClientRect();
-      const { width, height } = this.viewBlock!.getBoundingClientRect();
+    viewer.addEventListener("mousemove", (e: MouseEvent) => {
+      if (this.cache.dragging) {
+        const dx = e.clientX - this.cache.mouseX
+        const dy = e.clientY - this.cache.mouseY
 
-      this.handleChangeTransform({
-        ...sT,
-        translateX: (vR.left - e.clientX + width / 2) * sT.scaleX / (vT.scaleX || 1),
-        translateY: (vR.top - e.clientY + height / 2) * sT.scaleY / (vT.scaleY || 1)
-      }, this._source)
+        this.cache.mouseX = e.clientX
+        this.cache.mouseY = e.clientY
+
+        const { scaleX: sX, scaleY: sY, translateX, translateY } = this.getSourceTransform();
+        const { scaleX: vX = 1, scaleY: vY = 1 } = this.matrix
+
+        this.handleChangeTransform({
+          scaleX: sX, scaleY: sY,
+          translateX: translateX - dx * sX / vX, translateY: translateY - dy * sY / vY
+        }, this._source)
+      }
+    })
+
+    viewer.addEventListener("mouseup", () => {
+      this.cache.dragging = false;
+    })
+
+    viewer.addEventListener("mouseout", () => {
+      this.cache.dragging = false;
     })
 
     return viewer;
