@@ -13,18 +13,13 @@ export const SimpleDemo = (props: any) => {
 }
 
 export const SVGDemo = (props: any) => {
-  const [time, setTime] = useState(new Date());
-  useEffect(() => {
-    const timeInterval = setInterval(() => setTime(new Date()), 1000);
+  const [count, setCount] = useState(0)
 
-    return () => {
-      clearInterval(timeInterval);
-    }
-  })
-  return <svg className="svg-demo" width="300" height="300"  {...props}>
-    <text x="50" y="50" fill="red">{time.toLocaleTimeString()}</text>
+  return <svg className="svg-demo" width="200" height="200"  {...props}>
     <circle cx="100" cy="100" r="40" stroke="green" stroke-width="4" fill="yellow" />
-    <rect width="300" height="300" style={{ fill: "rgba(0,0,0,0.1)", strokeWidth: 1, stroke: "black" }} />
+    <text x="100" y="100" fill="red" >{count}</text>
+    <rect width="200" height="200" onClick={() => setCount(c => c + 1)}
+      style={{ fill: "rgba(0,0,0,0.1)", strokeWidth: 1, stroke: "black" }} />
   </svg>
 }
 

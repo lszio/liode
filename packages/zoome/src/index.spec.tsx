@@ -1,12 +1,12 @@
 import { describe, expect, test, beforeEach } from "vitest"
-import { render, screen, fireEvent } from "@testing-library/react"
+import { render, fireEvent } from "@testing-library/react"
 // import { SimpleDemo } from "./demo"
-import Zoome, { ZoomeMode } from "./index"
+import Zoome from "./index"
 import "@testing-library/jest-dom"
 
 declare module 'vitest' {
   export interface TestContext {
-    zoome: Zoome;
+    zoome: Zoome<any>;
   }
 }
 
@@ -65,7 +65,7 @@ describe("zoome", () => {
   })
 
   test("zoomout", async (ctx) => {
-    ctx.zoome.mode = ZoomeMode.ZOOMOUT;
+    ctx.zoome.mode = "zoomout";
     ctx.zoome.handleSourceMutated();
 
     expect(ctx.zoome.zoominp).toBe(false)
