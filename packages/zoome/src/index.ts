@@ -43,9 +43,12 @@ export default class Zoome<T extends Element> {
     this.viewBlock = this.createViewBlock();
     this.mode = mode || "zoomin";
 
+    this.cache.handleMouseMoveInSource = (e: MouseEvent) => this.handleMouseMoveInSource(e);
+    this.cache.handleSourceMutated = (_ms: any) => this.handleSourceMutated(_ms);
+
     this.container = container || document.body;
     this.container.appendChild(this.viewer);
-    this.observer = new MutationObserver(this.handleSourceMutated)
+    this.observer = new MutationObserver(this.cache.handleSourceMutated)
     this.matrix = { ...this._matrix, ...matrix }
     this.source = source;
   }
@@ -58,13 +61,13 @@ export default class Zoome<T extends Element> {
     }
   }
 
-  handleMouseMoveInSource = (event: MouseEvent) => {
+  handleMouseMoveInSource(event: MouseEvent) {
     const { clientX: mX, clientY: mY } = event
     const { offsetWidth: vX, offsetHeight: vY } = this.viewer
     // const { offsetWidth: sX, offsetHeight: sY } = this.source as HTMLElement
-    const { scaleX: ssX = 1, scaleY: ssY = 1 } = this.getSourceTransform();
+    const { scaleX: ssX = 1, scaleY: ssY = 1, translateX: stX, translateY: stY } = this.getSourceTransform();
     const { x, y } = this.source?.getBoundingClientRect() || { x: 0, y: 0 }
-    const [dX, dY] = [mX - x, mY - y]
+    const [dX, dY] = [mX - x + stX, mY - y + stY]
     if (this.cloned) {
       const { scaleX = 1, scaleY = 1 } = this._matrix;
       const translateX = vX / 2 - dX / ssX * scaleX
@@ -73,7 +76,7 @@ export default class Zoome<T extends Element> {
     }
   }
 
-  handleSourceMutated = (_mutations?: MutationRecord[]) => {
+  handleSourceMutated(_mutations?: MutationRecord[]) {
     // console.info(`zoome: ${this.name}: source changed`)
     this.cloned = this._source!.cloneNode(true) as T;
     this.doUpdateViewerOrViewerBlock();
@@ -153,11 +156,11 @@ export default class Zoome<T extends Element> {
       console.warn("same source, skip...")
       return;
     }
-    this._source && this.zoominp && this._source.removeEventListener("mousemove", this.handleMouseMoveInSource as any)
+    this._source && this.zoominp && this._source.removeEventListener("mousemove", this.cache.handleMouseMoveInSource as any)
     this._source = source;
     this.observer.disconnect();
     this._source && this.observer.observe(this._source, { attributes: true, subtree: true, characterData: true, })
-    this._source && this.zoominp && this._source.addEventListener("mousemove", this.handleMouseMoveInSource as any)
+    this._source && this.zoominp && this._source.addEventListener("mousemove", this.cache.handleMouseMoveInSource as any)
     this.handleSourceMutated([]);
     // console.info(`zoome: ${this.name}: update source element`)
   }
@@ -202,7 +205,7 @@ export default class Zoome<T extends Element> {
   protected createViewerElement(): HTMLElement {
     const viewer = document.createElement("div");
     viewer.classList.add("zoome-viewer");
-    viewer.id = "zoomer-viewer-" + this.name
+    viewer.id = "zoome-viewer-" + this.name
     viewer.style.overflow = "hidden"
 
     viewer.addEventListener("mousedown", (e) => {

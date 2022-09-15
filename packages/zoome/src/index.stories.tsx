@@ -10,7 +10,8 @@ export const Simple = () => <SimpleDemoWrapper />;
 
 export const DoubleSimple = () => <SimpleDemoWrapper matrix={{ scaleX: 2, scaleY: 2 }} />;
 
-export const DoubleWithTransformSimple = () => <SimpleDemoWrapper style={{ transform: "translate(20px, 20px)" }} matrix={{ scaleX: 2, scaleY: 2 }} />;
+export const DoubleWithTransformSimple = () => <SimpleDemoWrapper
+  style={{ transform: "translate(50px, 50px)" }} matrix={{ scaleX: 2, scaleY: 2 }} />;
 
 export const HalfSimple = () =>
   <SimpleDemoWrapper
@@ -25,7 +26,7 @@ export const HalfSimple = () =>
 export const Svg = () => <SVGDemoWrapper />;
 
 export const DoubleSvg = () => <SVGDemoWrapper
-  transform="translate(100, 100) scale(1)"
+  transform="translate(50, 50) scale(1)"
   style={{ transformOrigin: "0 0" }}
   matrix={{ scaleX: 2, scaleY: 2 }} />;
 

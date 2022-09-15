@@ -16,7 +16,7 @@ export const SVGDemo = (props: any) => {
   const [count, setCount] = useState(0)
 
   return <svg className="svg-demo" width="200" height="200"  {...props}>
-    <circle cx="100" cy="100" r="40" stroke="green" stroke-width="4" fill="yellow" />
+    <circle cx="100" cy="100" r="40" stroke="green" strokeWidth="4" fill="yellow" />
     <text x="100" y="100" fill="red" >{count}</text>
     <rect width="200" height="200" onClick={() => setCount(c => c + 1)}
       style={{ fill: "rgba(0,0,0,0.1)", strokeWidth: 1, stroke: "black" }} />
