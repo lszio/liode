@@ -1,5 +1,5 @@
 {
-  "name": "@eliya/zoome",
+  "name": "@ferld/zoome",
   "version": "0.0.1",
   "type": "module",
   "author": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "https",
-    "url": "https://github.com/Liszt21/Eliya"
+    "url": "https://github.com/Liszt21/ferld"
   },
   "files": [
     "dist"

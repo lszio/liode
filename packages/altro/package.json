@@ -1,5 +1,5 @@
 {
-  "name": "@example/basics",
+  "name": "@ferld/altro",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -19,6 +19,6 @@
     "vue": "^3.2.37"
   },
   "dependencies": {
-    "@eliya/games": "workspace:^0.0.0"
+    "@ferld/games": "workspace:^0.0.0"
   }
 }

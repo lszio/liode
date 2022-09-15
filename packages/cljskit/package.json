@@ -1,5 +1,5 @@
 {
-  "name": "@eliya/cljskit",
+  "name": "@ferld/cljskit",
   "version": "0.0.0",
   "devDependencies": {
     "shadow-cljs": "2.17.5"
@@ -27,6 +27,6 @@
   },
   "repository": {
     "type": "https",
-    "url": "https://github.com/Liszt21/Eliya"
+    "url": "https://github.com/Liszt21/ferld"
   }
 }

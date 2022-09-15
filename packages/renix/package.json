@@ -1,6 +1,5 @@
 {
-  "private": true,
-  "name": "@eliya/renix",
+  "name": "@ferld/renix",
   "sideEffects": false,
   "scripts": {
     "build": "pnpm build:style && remix build",
@@ -11,7 +10,7 @@
     "dev:style": "tailwindcss -w -i ./tailwind.css -o app/styles/tailwind.css"
   },
   "dependencies": {
-    "@eliya/games": "workspace:^0.0.0",
+    "@ferld/games": "workspace:^0.0.0",
     "@remix-run/node": "^1.6.8",
     "@remix-run/react": "^1.6.8",
     "@remix-run/serve": "^1.6.8",

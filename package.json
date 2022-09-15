@@ -1,5 +1,5 @@
 {
-  "name": "eliya",
+  "name": "ferld",
   "version": "0.0.0",
   "description": "Liszt21's frontend project",
   "main": "index.js",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "https",
-    "url": "https://github.com/Liszt21/Eliya"
+    "url": "https://github.com/Liszt21/ferld"
   },
   "devDependencies": {
     "turbo": "^1.4.2"

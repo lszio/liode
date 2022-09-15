@@ -1,5 +1,5 @@
-import { ReactionSpeed } from "@eliya/games";
-import style from "@eliya/games/style.css";
+import { ReactionSpeed } from "@ferld/games";
+import style from "@ferld/games/style.css";
 
 export function links() {
   return [{ rel: "stylesheet", href: style }]
