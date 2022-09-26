@@ -1,6 +1,5 @@
 {
   "name": "wedex",
-  "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -13,6 +12,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@crxjs/vite-plugin": "^1.0.14",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.1.0",
