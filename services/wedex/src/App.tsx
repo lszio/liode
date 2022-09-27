@@ -2,6 +2,9 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
 
+chrome?.bookmarks.getTree((tree) => { console.log(tree) })
+chrome?.tabs.query({}, (tabs) => console.log(tabs))
+
 function App() {
   const [count, setCount] = useState(0)
 
