@@ -1,0 +1,22 @@
+{
+  "name": "@ferld/eslint-config",
+  "version": "0.0.1",
+  "description": "my eslint config",
+  "main": "index.js",
+  "author": "Liszt21",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Liszt21/Ferld.git"
+  },
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.33.1",
+    "@typescript-eslint/parser": "^5.33.1",
+    "eslint": "^8.24.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-react": "^1.1.7",
+    "eslint-config-turbo": "^0.0.4",
+    "eslint-plugin-deprecation": "^1.3.2",
+    "eslint-plugin-header": "^3.1.1",
+    "eslint-plugin-import": "^2.26.0"
+  }
+}
