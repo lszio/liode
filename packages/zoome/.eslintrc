@@ -1,0 +1,6 @@
+{
+  "extends": "@ferld",
+  "parserOptions": {
+    "project": "tsconfig.json"
+  }
+}

@@ -24,6 +24,7 @@
   },
   "scripts": {
     "test": "vitest",
+    "lint": "eslint src",
     "coverage": "vitest run --coverage",
     "build": "vite build",
     "preview": "vite preview"
@@ -31,9 +32,12 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
+    "@types/testing-library__jest-dom": "^5.14.5",
     "@vitest/coverage-c8": "^0.23.1",
     "@vitest/ui": "^0.23.1",
     "jsdom": "^20.0.0",
+    "react": "^18.2.0",
+    "styled-component": "^2.8.0",
     "typescript": "^4.6.4",
     "vite": "^3.1.0",
     "vite-plugin-dts": "^1.4.1",

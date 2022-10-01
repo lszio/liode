@@ -1,9 +1,9 @@
-import { SimpleDemoWrapper, SVGDemoWrapper } from "./demo"
-import "./demo.css"
+import { SimpleDemoWrapper, SVGDemoWrapper } from "./demo";
+import "./demo.css";
 
 export default {
   title: "Zoome",
-  component: { SimpleDemoWrapper, SVGDemoWrapper },
+  component: { SimpleDemoWrapper, SVGDemoWrapper }
 };
 
 export const Simple = () => <SimpleDemoWrapper />;
