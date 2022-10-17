@@ -1,0 +1,16 @@
+{
+  "extends": [
+    "@ferld"
+  ],
+  "parserOptions": {
+    "project": "tsconfig.json"
+  },
+  "ignorePatterns": [
+    "*.stories.*"
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
+}

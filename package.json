@@ -7,6 +7,7 @@
     "build": "turbo run build --filter=!stories",
     "test": "turbo run test",
     "lint": "turbo run lint",
+    "lint:fix": "pnpm --filter=* lint:fix ",
     "dev": "turbo run dev",
     "storybook": "pnpm --filter stories storybook"
   },
@@ -22,7 +23,11 @@
     "type": "https",
     "url": "https://github.com/Liszt21/ferld"
   },
+  "resolutions": {
+    "typescript": "4.7.4"
+  },
   "devDependencies": {
+    "@ferld/eslint-config": "*",
     "turbo": "^1.4.2"
   }
 }

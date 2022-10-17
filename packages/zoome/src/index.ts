@@ -44,7 +44,7 @@ export default class Zoome<T extends Element> {
     this.mode = mode || "zoomin";
 
     this.cache.handleMouseMoveInSource = (e: MouseEvent) => this.handleMouseMoveInSource(e);
-    this.cache.handleSourceMutated = (_ms: any) => this.handleSourceMutated(_ms);
+    this.cache.handleSourceMutated = (_ms: MutationRecord[]) => this.handleSourceMutated(_ms);
 
     this.container = container || document.body;
     this.container.appendChild(this.viewer);
@@ -77,14 +77,13 @@ export default class Zoome<T extends Element> {
   }
 
   handleSourceMutated(_mutations?: MutationRecord[]) {
-    // console.info(`zoome: ${this.name}: source changed`)
-    this.cloned = this._source!.cloneNode(true) as T;
+    this._source && (this.cloned = this._source.cloneNode(true) as T);
     this.doUpdateViewerOrViewerBlock();
   }
 
   doUpdateViewerOrViewerBlock() {
     if (this.zoomoutp && this.viewBlock) {
-      const parentRect = this._source!.parentElement?.getBoundingClientRect() || { width: 0, height: 0 };
+      const parentRect = this._source?.parentElement ? this._source.parentElement.getBoundingClientRect() : new DOMRect();
       const sourceRect = this.getSourceRect();
       const viewerRect = this.viewer.getBoundingClientRect();
       const sourceMatrix = this.getSourceTransform();
@@ -106,14 +105,18 @@ export default class Zoome<T extends Element> {
     }
   }
 
-  getSourceRect() {
-    return this._source!.getBoundingClientRect();
+  getSourceRect(): DOMRect {
+    if (this._source) {
+      return this._source.getBoundingClientRect();
+    } else {
+      return new DOMRect()
+    }
   }
 
   getSourceTransform(): TransformValue {
     if (this._source) {
       const style = window.getComputedStyle(this._source);
-      const matrix = style.transform || style.webkitTransform;
+      const matrix = style.transform;
       if (matrix === "none") {
         return { scaleX: 1, scaleY: 1, translateX: 0, translateY: 0 };
       }
@@ -146,7 +149,7 @@ export default class Zoome<T extends Element> {
     this._matrix = { ...this._matrix, ...matrix };
     // console.info(`zoome: ${this.name}: update matrix`)
     if (this.cloned) {
-      this.handleChangeTransform(this._matrix as TransformValue, this._cloned!);
+      this.handleChangeTransform(this._matrix as TransformValue, this._cloned);
     }
   }
 
@@ -156,13 +159,12 @@ export default class Zoome<T extends Element> {
       console.warn("same source, skip...");
       return;
     }
-    this._source && this.zoominp && this._source.removeEventListener("mousemove", this.cache.handleMouseMoveInSource as any);
+    this._source && this.zoominp && this._source.removeEventListener("mousemove", this.cache.handleMouseMoveInSource);
     this._source = source;
     this.observer.disconnect();
     this._source && this.observer.observe(this._source, { attributes: true, subtree: true, characterData: true });
-    this._source && this.zoominp && this._source.addEventListener("mousemove", this.cache.handleMouseMoveInSource as any);
+    this._source && this.zoominp && this._source.addEventListener("mousemove", this.cache.handleMouseMoveInSource);
     this.handleSourceMutated([]);
-    // console.info(`zoome: ${this.name}: update source element`)
   }
 
   get cloned() { return this._cloned; }
@@ -213,7 +215,7 @@ export default class Zoome<T extends Element> {
         const sT = this.getSourceTransform();
         const vT = this.matrix;
         const vR = this.viewer.getBoundingClientRect();
-        const { width, height } = this.viewBlock!.getBoundingClientRect();
+        const { width, height } = this.viewBlock ? this.viewBlock.getBoundingClientRect() : { width: 100, height: 100 };
 
         const translateX = (vR.left - e.clientX + width / 2) * sT.scaleX / (vT.scaleX || 1);
         const translateY = (vR.top - e.clientY + height / 2) * sT.scaleY / (vT.scaleY || 1);
