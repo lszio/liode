@@ -15,7 +15,6 @@
     "./style.css": "./dist/style.css"
   },
   "scripts": {
-    "dev": "vite",
     "lint": "eslint src",
     "lint:fix": "pnpm lint --fix",
     "build": "tsc && vite build",
