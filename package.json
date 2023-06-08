@@ -28,6 +28,6 @@
   },
   "devDependencies": {
     "@ferld/eslint-config": "*",
-    "turbo": "^1.4.2"
+    "turbo": "^1.10.2"
   }
 }
