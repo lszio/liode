@@ -6,7 +6,9 @@ import vue from "@astrojs/vue"; // https://astro.build/config
 
 import react from "@astrojs/react";
 
+import elm from "astro-integration-elm"
+
 // https://astro.build/config
 export default defineConfig({
-  integrations: [mdx(), vue(), react()]
+  integrations: [mdx(), vue(), react(), elm()]
 });
