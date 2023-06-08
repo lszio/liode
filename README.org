@@ -9,3 +9,4 @@
 * services
 - stories :: storybook
 - algro :: my blog 
+- wedex :: index page
