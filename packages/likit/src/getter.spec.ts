@@ -1,6 +1,5 @@
-import { describe, expect, test, vi as spy } from "vitest"
-import { EditType, getEditOperations, withDifferents } from "./likit"
-import { slice, getBy, parseGetter, withLimit } from "./getters"
+import { describe, expect, test } from "vitest"
+import { slice, getBy, parseGetter, withLimit } from "./getter"
 
 const object = {
   o: { o: { n: 1 } },

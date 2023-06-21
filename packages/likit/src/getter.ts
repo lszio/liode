@@ -53,8 +53,9 @@ export function* range(start: number, end: number, step: Exclude<number, 0> = 1)
   }
 }
 
-// "sdf.qwe[0](id@ss-ss)"
-// TODO: "[0:1:1][id@sdf-sdg]"
+// DONE: "sdf.qwe[0](id@ss-ss)"
+// DONE: [0:1:1]
+// TODO: [id@sdf - sdg]
 const KEY_PATTERN = RegExp(/\[(?<start>-?\d)?:(?<end>-?\d+)?(:(?<step>-?\d+))?\]|\[(?<index>-?\d+)\]|\((?<slot>\w+)@(?<value>[^\(\)]+)\)|(?<key>\w+)/g)
 export function parseGetter(key: string) {
   const matched = key.matchAll(KEY_PATTERN)
