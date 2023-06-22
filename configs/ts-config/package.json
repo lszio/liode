@@ -1,0 +1,14 @@
+{
+  "name": "@ferld/ts-config",
+  "version": "0.0.1",
+  "description": "Typescript configuration",
+  "main": "tsconfig.json",
+  "files": [
+    "tsconfig.json"
+  ],
+  "keywords": ["ts-config"],
+  "author": "Liszt21",
+    "publishConfig": {
+        "access": "public"
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "name": "@ferld/prettier-config",
+    "version": "0.0.1",
+    "description": "Shared Prettier configuration",
+    "keywords": [
+        "prettier",
+        "config"
+    ],
+    "author": {
+        "name": "Liszt21"
+    },
+    "main": "index.json",
+    "dependencies": {
+        "prettier-plugin-packagejson": "~2.4.3"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}
