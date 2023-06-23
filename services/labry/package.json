@@ -17,6 +17,7 @@
     "@types/react-dom": "^18.2.6",
     "astro": "^2.7.0",
     "astro-integration-elm": "^0.0.9",
+    "elm": "0.19.1-5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "vue": "^3.3.4"
