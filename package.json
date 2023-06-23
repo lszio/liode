@@ -6,6 +6,7 @@
   "scripts": {
     "build": "turbo run build --filter=!stories",
     "test": "turbo run test",
+    "test:ci": "turbo run test:ci",
     "lint": "turbo run lint",
     "lint:fix": "pnpm --filter=* lint:fix ",
     "dev": "turbo run dev",
