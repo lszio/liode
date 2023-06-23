@@ -28,6 +28,9 @@
   },
   "devDependencies": {
     "@ferld/config": "workspace:^",
+    "@ferld/ts-config": "workspace:^",
+    "@ferld/prettier-config": "workspace:^",
+    "@ferld/eslint-config": "workspace:^",
     "turbo": "^1.10.4"
   }
 }
