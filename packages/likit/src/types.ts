@@ -1,4 +1,4 @@
-type Literal = string | number | Symbol | boolean
+type Literal = string | number | symbol | boolean
 type WithPrefix<K extends string, P extends string = ""> = K extends `[${infer _}]` ? `${P}${K}` : `${P}.${K}`
 
 type FlattenArray<A extends Array<unknown>, P extends string = ""> = A extends Array<infer T> ? {
@@ -9,9 +9,9 @@ type FlattenRecord<O extends object, P extends string = ""> =
   {
     [K in keyof O]:
     O[K] extends Literal
-    ? { [KK in keyof O & string as `${P}${P extends '' ? '' : "."}${KK}`]: O[KK] }
+    ? { [KK in keyof O & string as `${P}${P extends "" ? "" : "."}${KK}`]: O[KK] }
     : K extends string
-    ? FlattenObject<O[K], `${P}${P extends '' ? '' : "."}${K}`>
+    ? FlattenObject<O[K], `${P}${P extends "" ? "" : "."}${K}`>
     : never
   }[keyof O]
 
