@@ -1,13 +1,11 @@
 {
     "extends": "@ferld/ts-config/tsconfig.json",
-    "compilerOptions": {
-        "noEmit": true
-    },
     "exclude": [
         "**/node_modules",
         "**/.eslintrc.js"
     ],
     "include": [
-        "configs/*/src"
+        "**/src",
+        "**/*.config.ts"
     ]
 }
