@@ -8,15 +8,15 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, "src/index.ts"),
-      name: "Zoome",
+      name: "zoome",
       formats: ["es", "umd"],
-      fileName: (format) => `index.${format}.js`
+      fileName: format => `index.${format}.js`
     }
   },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src")
-    },
+    }
   },
   plugins: [dts({ insertTypesEntry: true })]
 });
