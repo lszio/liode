@@ -23,7 +23,9 @@
   },
   "scripts": {
     "build": "tsc && vite build",
-    "test": "vitest",
+    "test": "vitest run",
+    "test:ci": "vitest",
+    "coverage": "vitest run --coverage",
     "dev": "vite watch"
   },
   "devDependencies": {

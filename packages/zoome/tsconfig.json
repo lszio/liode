@@ -20,7 +20,8 @@
     "skipLibCheck": true
   },
   "include": [
-    "src"
+    "src",
+    "*.config.ts"
   ],
   "exclude": [
     "**/*.spec.ts"

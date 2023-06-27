@@ -10,9 +10,9 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, "src/index.ts"),
-      name: "ferldGames",
+      name: "ferld-games",
       formats: ["es", "umd"],
-      fileName: (format) => `index.${format}.js`
+      fileName: format => `index.${format}.js`
     },
     rollupOptions: {
       external: ["react", "react-dom"],
@@ -27,7 +27,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src")
-    },
+    }
   },
   plugins: [react(), vanillaExtractPlugin(), dts({
     insertTypesEntry: true
