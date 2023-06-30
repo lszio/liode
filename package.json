@@ -25,14 +25,9 @@
     "type": "https",
     "url": "https://github.com/Liszt21/ferld"
   },
-  "resolutions": {
-    "typescript": "4.7.4"
-  },
   "devDependencies": {
+    "@changesets/cli": "^2.26.2",
     "@ferld/config": "workspace:^",
-    "@ferld/eslint-config": "workspace:^",
-    "@ferld/prettier-config": "workspace:^",
-    "@ferld/ts-config": "workspace:^",
     "turbo": "^1.10.6"
   }
 }
