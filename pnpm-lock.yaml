@@ -10,6 +10,15 @@ importers:
       '@ferld/config':
         specifier: workspace:^
         version: link:configs/config
+      '@ferld/eslint-config':
+        specifier: workspace:^
+        version: link:configs/eslint-config
+      '@ferld/prettier-config':
+        specifier: workspace:^
+        version: link:configs/perttier-config
+      '@ferld/ts-config':
+        specifier: workspace:^
+        version: link:configs/ts-config
       turbo:
         specifier: ^1.10.6
         version: 1.10.6
