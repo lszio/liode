@@ -34,5 +34,8 @@
     "vite": "^2.8.0",
     "vite-plugin-dts": "^0.9.9",
     "vitest": "^0.23.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -6,9 +6,11 @@
   "files": [
     "tsconfig.json"
   ],
-  "keywords": ["ts-config"],
+  "keywords": [
+    "ts-config"
+  ],
   "author": "Liszt21",
-    "publishConfig": {
-        "access": "public"
-    }
+  "publishConfig": {
+    "access": "public"
+  }
 }
