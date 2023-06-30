@@ -1,4 +1,5 @@
 {
+  "private": "true",
   "name": "algro",
   "type": "module",
   "version": "0.0.1",

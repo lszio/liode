@@ -12,3 +12,5 @@ dist/**
 .next/**
 
 *.log
+
+/.changeset/pre.json
