@@ -1,22 +1,60 @@
 import { useState, useEffect } from "react";
-// import classNames from "classnames";
 import { css } from "@emotion/css";
 import styled from "@emotion/styled";
 
+interface StackItem {
+  name: string;
+  time: Date;
+}
+
+function defaultPromot() {
+  return localStorage.getItem("submission-check-promot") || "";
+}
+
 export default function SubmissionCheck() {
-  const [promot, setPromot] = useState(
-    localStorage.getItem("submission-check-promot") || ""
-  );
   const [users, setUsers] = useState<string[]>([]);
+  const [stack, setStack] = useState<StackItem[]>([]);
+  const [promot, setPromot] = useState(defaultPromot());
+  const [current, setCurrent] = useState<number>(-1);
+  const [submitted, setSubmitted] = useState<string[]>([]);
+
+  const undo = () => {
+    const action = stack[current];
+    if (action) {
+      setCurrent(current - 1);
+      toggle(action.name, false);
+    } else {
+      console.warn("nothing to undo");
+    }
+  };
+  const redo = () => {
+    const action = stack[current + 1];
+    if (action) {
+      setCurrent(current + 1);
+      toggle(action.name, false);
+    } else {
+      console.warn("nothing to redo");
+    }
+  };
 
   useEffect(() => {
+    setStack([]);
+    setCurrent(-1);
+    setSubmitted([]);
     setUsers(Array.from(new Set(promot.split(/[.,;\n]/).filter((n) => n))));
   }, [promot]);
 
-  const [submission, setSubmission] = useState<Record<string, boolean>>({});
+  const toggle = (name: string, record = true) => {
+    if (submitted.includes(name)) {
+      setSubmitted([...submitted.filter((n) => n !== name)]);
+    } else {
+      setSubmitted([...submitted, name]);
+    }
 
-  const onChange = (name: string) => {
-    setSubmission({ ...submission, [name]: !submission[name] });
+    if (record) {
+      setCurrent(current + 1);
+      setStack([...stack.slice(0, current + 1), { name, time: new Date() }]);
+    }
   };
 
   return (
@@ -38,20 +76,25 @@ export default function SubmissionCheck() {
       <div style={{ display: "flex", justifyContent: "center" }}>
         <button
           style={{ margin: "6px", padding: "3px" }}
-          onClick={() =>
-            setSubmission(
-              users.reduce<Record<string, boolean>>((acc, name) => {
-                acc[name] = true;
-                return acc;
-              }, {})
-            )
-          }
+          onClick={() => setSubmitted([...users])}
         >
           ALL
         </button>
         <button
           style={{ margin: "6px", padding: "3px" }}
-          onClick={() => setSubmission({})}
+          onClick={() => undo()}
+        >
+          UNDO
+        </button>
+        <button
+          style={{ margin: "6px", padding: "3px" }}
+          onClick={() => redo()}
+        >
+          REDO
+        </button>
+        <button
+          style={{ margin: "6px", padding: "3px" }}
+          onClick={() => setSubmitted([])}
         >
           NONE
         </button>
@@ -64,13 +107,15 @@ export default function SubmissionCheck() {
           flex-flow: row wrap;
         `}
       >
-        {users
-          .filter((name) => submission[name])
-          .map((name) => UserCheckbox({ name, submitted: true, onChange }))}
+        {submitted.map((name) =>
+          UserCheckbox({ name, submitted: true, onChange: toggle })
+        )}
         <Banner>UNSUBMITTED</Banner>
         {users
-          .filter((name) => !submission[name])
-          .map((name) => UserCheckbox({ name, submitted: false, onChange }))}
+          .filter((name) => !submitted.includes(name))
+          .map((name) =>
+            UserCheckbox({ name, submitted: false, onChange: toggle })
+          )}
       </form>
     </>
   );
