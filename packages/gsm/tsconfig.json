@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib",
+    "baseUrl": ".",
+    "skipLibCheck": true,
+    "declaration": true,
+    "declarationMap": true,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "noImplicitOverride": false,
+    "noEmitOnError": false,
+    "noUnusedLocals": false,
+    "noImplicitReturns": false,
+    "strictNullChecks": false,
+    "strict": true,
+    "incremental": true,
+    // Needs to be disabled to support property injection
+    "strictPropertyInitialization": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "downlevelIteration": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "ES2017",
+    "jsx": "react",
+    "lib": [
+      "ES2017",
+      "dom"
+    ],
+    "sourceMap": true,
+    "types": [
+      "node",
+      "reflect-metadata"
+    ]
+  },
+  "include": [
+    "src"
+  ]
+}
