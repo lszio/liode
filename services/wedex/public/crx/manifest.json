@@ -1,0 +1,21 @@
+{
+  "name": "Wedex",
+  "description": "my chrome extension",
+  "version": "0.0.0",
+  "manifest_version": 3,
+  "permissions": [
+    "alarms",
+    "notifications",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "js/sw.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Wedex",
+    "default_popup": "popup.html"
+  },
+  "icons": {
+  }
+}

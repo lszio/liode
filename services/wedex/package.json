@@ -1,0 +1,11 @@
+{
+  "name": "wedex",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "watch:crx": "shadow-cljs watch crx"
+  },
+  "devDependencies": {
+    "shadow-cljs": "2.25.2"
+  }
+}

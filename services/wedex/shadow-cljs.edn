@@ -1,0 +1,17 @@
+;; shadow-cljs configuration
+{:source-paths
+ ["src"]
+
+ :dependencies
+ []
+
+ :builds
+ {:crx {:target :esm
+        :output-dir "public/crx/js"
+        :runtime :custom
+        :modules
+        {:shared {:entries []}
+         :sw {:init-fn crx.sw/main 
+              :depends-on #{:shared}}
+         :popup {:init-fn  crx.popup/main
+                 :depends-on #{:shared}}}}}}
