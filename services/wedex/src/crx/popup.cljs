@@ -1,4 +1,4 @@
 (ns crx.popup)
 
-(defn main []
+(defn init []
   (prn "hello popup"))

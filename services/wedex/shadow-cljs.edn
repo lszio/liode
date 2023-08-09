@@ -5,13 +5,18 @@
  :dependencies
  []
 
+ :dev-http {8000 "public"}
+
  :builds
  {:crx {:target :esm
-        :output-dir "public/crx/js"
+        :output-dir "public/js"
         :runtime :custom
+        :devtools {:reload-strategy :full}
         :modules
         {:shared {:entries []}
-         :sw {:init-fn crx.sw/main 
-              :depends-on #{:shared}}
-         :popup {:init-fn  crx.popup/main
+         :sw {:init-fn crx.sw/init 
+              :depends-on #{:shared}} 
+         :core {:init-fn core/init
+                 :depends-on #{:shared}}
+         :popup {:init-fn  crx.popup/init
                  :depends-on #{:shared}}}}}}

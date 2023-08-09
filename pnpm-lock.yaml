@@ -316,6 +316,16 @@ importers:
         version: 3.3.4
 
   services/wedex:
+    dependencies:
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+      scheduler:
+        specifier: ^0.23.0
+        version: 0.23.0
     devDependencies:
       shadow-cljs:
         specifier: 2.25.2

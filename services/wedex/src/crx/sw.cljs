@@ -1,4 +1,4 @@
 (ns crx.sw)
 
-(defn main []
+(defn init []
   (prn "sw"))
