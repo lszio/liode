@@ -1,4 +1,4 @@
-(ns crx.popup
+(ns crx.sp
   (:require [goog.dom :as gdom]
             [reagent.dom.client :as rdom]))
 
@@ -6,12 +6,13 @@
 
 (defn- app []
   [:main.container 
-   [:h1 "Hello Popup"]])
+   [:h1 "Hello Side Panel"]])
 
 (defn ^:dev/after-load render []
   (js/console.log "render")
   (rdom/render root [app]))
 
 (defn init []
-  (js/console.log "init popup")
+  (js/console.log "init side panel")
   (render))
+

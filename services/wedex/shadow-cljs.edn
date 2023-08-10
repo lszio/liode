@@ -11,7 +11,9 @@
  {:crx {:target :esm
         :output-dir "public/js"
         :modules
-        {:shared {:entries []}
+        {:shared {:entries [crx.dev]}
+         :sp {:init-fn crx.sp/init
+              :depends-on #{:shared}}
          :sw {:init-fn crx.sw/init 
               :depends-on #{:shared}} 
          :core {:init-fn core/init

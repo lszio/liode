@@ -3,14 +3,31 @@
   "description": "my chrome extension",
   "version": "0.0.0",
   "manifest_version": 3,
+  "sandbox": {
+    "pages": [
+      "side-panel.html",
+      "popup.html"
+    ]
+  },
   "permissions": [
+    "activeTab",
     "alarms",
+    "bookmarks",
     "notifications",
-    "storage"
+    "history",
+    "storage",
+    "sidePanel",
+    "tabs",
+    "tabGroups",
+    "webRequest",
+    "contextMenus"
   ],
   "background": {
     "service_worker": "js/sw.js",
     "type": "module"
+  },
+  "side_panel": {
+    "default_path": "side-panel.html"
   },
   "action": {
     "default_title": "Wedex",
