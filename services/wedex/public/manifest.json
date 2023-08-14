@@ -3,12 +3,6 @@
   "description": "my chrome extension",
   "version": "0.0.0",
   "manifest_version": 3,
-  "sandbox": {
-    "pages": [
-      "side-panel.html",
-      "popup.html"
-    ]
-  },
   "permissions": [
     "activeTab",
     "alarms",

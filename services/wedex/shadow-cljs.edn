@@ -10,6 +10,7 @@
  :builds
  {:crx {:target :esm
         :output-dir "public/js"
+        :runtime :custom
         :modules
         {:shared {:entries [crx.dev]}
          :sp {:init-fn crx.sp/init
