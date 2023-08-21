@@ -8,4 +8,5 @@
 
 (defn Clock []
   (let [time-str (-> @timer .toTimeString (str/split " ") first)]
-    [:div.clock {:style {:color "#f34"}} time-str]))
+    [:div.clock.w-full 
+     [:div.number.border-solid.border-2.border-indigo-600 time-str]]))

@@ -40,8 +40,7 @@
 (defn App []
   (let [window-list @ws
         bookmark-list @bs]
-    [:main.container 
-      [:h1 "Hello World!"]
+    [:main.w-screen.min-h-screen
       [Clock]
       [WindowList window-list]
       [BookmarkList bookmark-list]]))
