@@ -14,36 +14,36 @@
 
 (defn WindowBox [w]
   (let [id (get w "id")]
-    [:div.window-box 
-     {:key (get w id) 
+    [:div.window-box
+     {:key (get w id)
       :style {:width (get w "width")}}
      [:span id]]))
 
 (defn WindowList [ws]
   (let [length (count ws)]
     [:div.window-list
-      [:span length]
-      (for [w ws] [WindowBox w])]))
+     [:span length]
+     (for [w ws] [WindowBox w])]))
 
 (defn bookmark-group? [i]
   (nil? (get i "url" nil)))
 
-(defn BookmarkList [l] 
+(defn BookmarkList [l]
   (let [length (count l)]
     [:div.bookmark-list
-     [:span length]
-     [:ul 
+     [:ul.divide-y.divide-dashed
       (for [b l]
-           [:li {:key (get b "id")}  
-            [:a {:href (get b "url") :target "_blank"} (get b "title")]])]]))
+        [:li.h-8.flex.flex-row.align-middle.cursor-pointer
+         {:key (get b "id") :on-click #(js/window.open (get b "url") "_blank")}
+         [:span.h-full.inline-block.grow.truncate {} (get b "title")]
+         [:div.h-full.groups "groups"]])]]))
 
 (defn App []
-  (let [window-list @ws
-        bookmark-list @bs]
-    [:main.w-screen.min-h-screen
-      [Clock]
-      [WindowList window-list]
-      [BookmarkList bookmark-list]]))
+  (let [bookmark-list @bs]
+    [:main.min-h-screen.px-10
+     [Clock]
+      ;; [WindowList window-list]
+     [BookmarkList bookmark-list]]))
 
 (defn update-bookmarks [l]
   (reset! bs [])
@@ -61,7 +61,7 @@
 
 (defn ^:dev/after-load render []
   (js/chrome.windows.getAll #(-> % js->clj update-windows))
-  (js/chrome.bookmarks.search #js {} #(-> % js->clj update-bookmarks)) 
+  (js/chrome.bookmarks.search #js {} #(-> % js->clj update-bookmarks))
   (js/chrome.tabs.query #js {} #(-> % js->clj update-tabs))
   (rdom/render root [App]))
 
