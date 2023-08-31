@@ -3,7 +3,9 @@ node_modules
 .fleet
 
 .lsp
+.calva
 .clj-kondo
+.nrepl-port
 .turbo
 
 out

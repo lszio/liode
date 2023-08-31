@@ -7,8 +7,6 @@
  :dependencies
  [[reagent "1.2.0"]]
 
- :dev-http {8000 "public"}
-
  :builds
  {:crx {:target :esm
         :output-dir "public/js"

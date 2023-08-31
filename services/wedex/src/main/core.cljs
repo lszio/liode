@@ -1,6 +1,8 @@
 (ns core
   (:require [goog.dom :as gdom]
             ;; [cljs.pprint :as pp]
+            ;; [react :as react]
+            [clojure.string :as s]
             [reagent.core :as r]
             [reagent.dom.client :as rdom]
             ;; [shadow.cljs.modern :refer (js-await)]
@@ -11,6 +13,7 @@
 (def ts (r/atom []))
 (def bs (r/atom []))
 (def gs (r/atom {}))
+(def hs (r/atom []))
 
 (defn WindowBox [w]
   (let [id (get w "id")]
@@ -28,15 +31,25 @@
 (defn bookmark-group? [i]
   (nil? (get i "url" nil)))
 
-(defn BookmarkList [l]
-  (let [length (count l)]
-    [:div.bookmark-list
-     [:ul.divide-y.divide-dashed
-      (for [b l]
-        [:li.h-8.flex.flex-row.align-middle.cursor-pointer
-         {:key (get b "id") :on-click #(js/window.open (get b "url") "_blank")}
-         [:span.h-full.inline-block.grow.truncate {} (get b "title")]
-         [:div.h-full.groups "groups"]])]]))
+(defn match-with-text [b t]
+  (let [title (get b "title")
+        groups (get b "groups" [])
+        url (get b "url")]
+    (or (contains? groups t) 
+        (s/includes? title t)
+        (s/includes? url t))))
+
+(defn BookmarkList []
+  (let [search (r/atom "")]
+    (fn []
+      [:div.bookmark-list
+      [:input.w-full.h-6 {:default-value @search :on-change #(->> % .-target .-value (reset! search))}]
+      [:ul.divide-y.divide-dashed
+        (for [b (filter #(match-with-text % @search) @bs)]
+          [:li.h-8.flex.flex-row.align-middle.cursor-pointer
+          {:key (get b "id") :on-click #(js/window.open (get b "url") "_blank")}
+          [:span.h-full.inline-block.grow.truncate {} (get b "title")]
+          [:div.h-full.groups "groups"]])]])))
 
 (defn App []
   (let [bookmark-list @bs]
@@ -46,12 +59,15 @@
      [BookmarkList bookmark-list]]))
 
 (defn update-bookmarks [l]
-  (reset! bs [])
-  (reset! gs [])
-  (doseq [i l]
-    (if (bookmark-group? i)
-      (swap! gs conj i)
-      (swap! bs conj i))))
+  (let [bl (atom [])
+        gl (atom [])]
+    (doseq [i l]
+      (if (bookmark-group? i)
+        (swap! gl conj i)
+        (swap! bl conj i))) 
+    ;; (swap! gl (map #(prn)))
+    (reset! bs @bl)
+    (reset! gs @gl)))
 
 (defn update-windows [l]
   (reset! ws l))
@@ -59,10 +75,14 @@
 (defn update-tabs [t]
   (reset! ts t))
 
+(defn update-histories [h]
+  (reset! hs h))
+
 (defn ^:dev/after-load render []
-  (js/chrome.windows.getAll #(-> % js->clj update-windows))
   (js/chrome.bookmarks.search #js {} #(-> % js->clj update-bookmarks))
+  (js/chrome.windows.getAll #(-> % js->clj update-windows))
   (js/chrome.tabs.query #js {} #(-> % js->clj update-tabs))
+  (js/chrome.history.search #js {:text ""} #(-> % js->clj update-histories))
   (rdom/render root [App]))
 
 (defn on-create-window [w] (js/console.log w))
