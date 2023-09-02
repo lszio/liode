@@ -2,6 +2,7 @@
   (:require [goog.dom :as gdom]
             ;; [cljs.pprint :as pp]
             ;; [react :as react]
+            [crx.apis :as api]
             [clojure.string :as s]
             [reagent.core :as r]
             [reagent.dom.client :as rdom]
@@ -22,12 +23,6 @@
       :style {:width (get w "width")}}
      [:span id]]))
 
-(defn WindowList [ws]
-  (let [length (count ws)]
-    [:div.window-list
-     [:span length]
-     (for [w ws] [WindowBox w])]))
-
 (defn bookmark-group? [i]
   (nil? (get i "url" nil)))
 
@@ -43,31 +38,30 @@
   (let [search (r/atom "")]
     (fn []
       [:div.bookmark-list
-      [:input.w-full.h-6 {:default-value @search :on-change #(->> % .-target .-value (reset! search))}]
+      [:input.w-full.h-8.border-zinc-200.border-2 
+       {:default-value @search 
+        :on-change #(->> % .-target .-value (reset! search))}]
       [:ul.divide-y.divide-dashed
-        (for [b (filter #(match-with-text % @search) @bs)]
-          [:li.h-8.flex.flex-row.align-middle.cursor-pointer
-          {:key (get b "id") :on-click #(js/window.open (get b "url") "_blank")}
+        (for [b (doall (filter #(match-with-text % @search) @bs))]
+          [:li.h-8.flex.flex-row.align-middle.cursor-pointer 
+           {:key (get b "id") 
+            :on-click #(js/window.open (get b "url") "_blank")}
           [:span.h-full.inline-block.grow.truncate {} (get b "title")]
-          [:div.h-full.groups "groups"]])]])))
+          [:div.h-full.groups (get b "group")]])]])))
 
 (defn App []
-  (let [bookmark-list @bs]
-    [:main.min-h-screen.px-10
-     [Clock]
-      ;; [WindowList window-list]
-     [BookmarkList bookmark-list]]))
+  [:main.min-h-screen.px-10
+   [Clock]
+   [BookmarkList]])
+
+(defn with-groups [b]
+  b)
 
 (defn update-bookmarks [l]
-  (let [bl (atom [])
-        gl (atom [])]
-    (doseq [i l]
-      (if (bookmark-group? i)
-        (swap! gl conj i)
-        (swap! bl conj i))) 
-    ;; (swap! gl (map #(prn)))
-    (reset! bs @bl)
-    (reset! gs @gl)))
+  (let [gl (doall (filter bookmark-group? l))
+        bl (doall (filter #(not (bookmark-group? %)) l))]
+    (reset! bs bl)
+    (reset! gs gl)))
 
 (defn update-windows [l]
   (reset! ws l))
@@ -78,22 +72,21 @@
 (defn update-histories [h]
   (reset! hs h))
 
+(defn on-message [e]
+  (let [data (js->clj (.-data e))
+        command (get data "command")]
+    (js/console.log (str "receive message with command: " command))
+    (case command
+      "update-bookmarks" (-> (get data "value") js->clj update-bookmarks)
+      "unknown")))
+
 (defn ^:dev/after-load render []
-  (js/chrome.bookmarks.search #js {} #(-> % js->clj update-bookmarks))
-  (js/chrome.windows.getAll #(-> % js->clj update-windows))
-  (js/chrome.tabs.query #js {} #(-> % js->clj update-tabs))
-  (js/chrome.history.search #js {:text ""} #(-> % js->clj update-histories))
+  (js/window.addEventListener "message" on-message)
+  (api/send-request "bookmarks")
   (rdom/render root [App]))
 
-(defn on-create-window [w] (js/console.log w))
-(defn on-remove-window [w] (js/console.log w))
-(defn on-focus-window [w] (js/console.log w))
-
-(defn attach-handlers []
-  (js/chrome.windows.onCreated.addListener on-create-window)
-  (js/chrome.windows.onRemoved.addListener on-remove-window)
-  (js/chrome.windows.onFocusChanged.addListener on-focus-window))
+(defn ^:dev/before-load stop []
+  (js/window.removeEventListener "message" on-message))
 
 (defn init []
-  (attach-handlers)
   (render))
