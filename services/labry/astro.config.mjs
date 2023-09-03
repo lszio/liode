@@ -7,5 +7,6 @@ import tailwind from "@astrojs/tailwind"
 import elm from "astro-integration-elm"
 
 export default defineConfig({
-  integrations: [mdx(), vue(), react(), elm(), tailwind()]
+  integrations: [mdx(), vue(), react(), elm(), tailwind()],
+  output: "server"
 });

@@ -1,0 +1,11 @@
+---
+import {getUser} from '../../supabase';
+const user = await getUser(Astro.request);
+
+import Layout from '../../layouts/Layout.astro';
+import LoginOrRegister from '../../components/LoginOrRegister';
+---
+
+<Layout title="Login">
+    {user ? <div>{user}</div>: <LoginOrRegister client:only="react" />  }
+</Layout>
