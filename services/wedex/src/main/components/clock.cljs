@@ -7,5 +7,5 @@
 
 (defn Clock []
   (let [time-str (-> @timer .toTimeString (str/split " ") first)]
-    [:div.font-mono.text-3xl
+    [:div.font-mono.text-3xl.text-blue-300
      [:div.border-solid.text-center time-str]]))

@@ -38,7 +38,7 @@
   (let [search (r/atom "")]
     (fn []
       [:div.bookmark-list
-      [:input.w-full.h-8.border-zinc-200.border-2 
+      [:input.w-full.h-8.border-zinc-200.border-2
        {:default-value @search 
         :on-change #(->> % .-target .-value (reset! search))}]
       [:ul.divide-y.divide-dashed
@@ -82,6 +82,17 @@
 
 (defn ^:dev/after-load render []
   (js/window.addEventListener "message" on-message)
+  (prn (.now js/Date))
+  (js/setTimeout 
+   (fn []
+     (-> (js/document.querySelectorAll "link[rel=stylesheet]")
+         (.forEach (fn [l]
+                     (let [href (-> l .-href (.replace #"\?.*|$", (str "?t=" (.now js/Date))))
+                           h (-> l .-href (.replace #"\?.*|$", ""))]
+                       (aset l "href" href)
+                       (aset l "href" h)
+                       (prn (.now js/Date))
+                       ))))) 1000)
   (api/send-request "bookmarks")
   (rdom/render root [App]))
 
