@@ -1,4 +1,4 @@
-import { supabase } from "../supabase";
+import { supabase } from "../libs/supabase";
 
 async function signInWithGithub() {
   const { data, error } = await supabase.auth.signInWithOAuth({
