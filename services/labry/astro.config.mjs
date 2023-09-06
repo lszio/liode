@@ -13,7 +13,7 @@ export default defineConfig({
   adapter: vercel(),
   vite: {
     ssr: {
-      noExternal: ["linkedom"] // FIXME: for elm deps
+      // noExternal: ["linkedom"] // FIXME: for elm deps
     }
   }
 });
