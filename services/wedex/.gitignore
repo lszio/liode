@@ -21,3 +21,4 @@ pom.xml.asc
 
 public/*/js
 public/css
+.env

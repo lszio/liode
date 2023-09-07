@@ -2,6 +2,7 @@
   (:require [goog.dom :as gdom]
             ;; [cljs.pprint :as pp]
             ;; [react :as react]
+            [api.supabase :as sb]
             [crx.apis :as api]
             [clojure.string :as s]
             [reagent.core :as r]
@@ -94,6 +95,7 @@
                        (prn (.now js/Date))
                        ))))) 1000)
   (api/send-request "bookmarks")
+  (sb/login-with-github)
   (rdom/render root [App]))
 
 (defn ^:dev/before-load stop []
