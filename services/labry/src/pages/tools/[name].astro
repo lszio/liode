@@ -1,0 +1,17 @@
+--- 
+import Layout from "../../layouts/Layout.astro";
+
+export function getStaticPaths () {
+    return [
+        {params: {name: "submission-check", title: "Submission Check"}}
+    ]
+}
+
+export const prerender = true
+
+const {name, title} = Astro.params;
+---
+
+<Layout title={title || ""}>
+    <h1>{title}</h1>
+</Layout>
