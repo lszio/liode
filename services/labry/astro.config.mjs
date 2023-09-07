@@ -5,10 +5,9 @@ import react from "@astrojs/react";
 import vue from "@astrojs/vue";
 import tailwind from "@astrojs/tailwind"
 import vercel from "@astrojs/vercel/serverless"
-import elm from "astro-integration-elm"
 
 export default defineConfig({
-  integrations: [mdx(), vue(), react(), elm(), tailwind()],
+  integrations: [mdx(), vue(), react(), tailwind()],
   output: "server",
   adapter: vercel(),
   vite: {
