@@ -1,5 +1,19 @@
 type Fn = (..._: any[]) => unknown;
 
+/**
+ * Curry Type 
+ * Type: (a, b, c) => d TO
+ * Type: (a) => (b) => (c) => d
+ * Type: (a, b) => (c) => d
+ * Type: (a) => (b, c) => d
+ * ...
+ * @date 9/9/2023 - 10:14:23 AM
+ * @author Li Shuzhi
+ *
+ * @export
+ * @typedef {Curry}
+ * @template F
+ */
 export type Curry<F extends Fn> = CurryHelper<
   Parameters<F>,
   ReturnType<F>
@@ -25,13 +39,17 @@ type CurryToLeft<LS, R, RS extends unknown[] = []> = LS extends []
   : never;
 
 /**
- * TODO: Description placeholder
- * @date 9/8/2023 - 2:06:50 PM
- * @author 李书志
+ * curry (a, b, c) => d TO
+ * (a) => (b) => (c) => d 
+ * (a, b) => (c) => d
+ * (a) => (b, c) => d
+ * ...
+ * @date 9/9/2023 - 10:14:30 AM
+ * @author Li Shuzhi
  *
  * @export
  * @template F
- * @param {Fn} fn
+ * @param {F} fn
  * @returns {Curry<F>}
  */
 export function curry<F extends Fn>(fn: F): Curry<F> {
