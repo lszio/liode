@@ -4,13 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "run-p -l *:watch",
+    "build": "run-s *:build",
     "compile": "run-s *:compile",
     "repl": "shadow-cljs browser-repl",
-    "cljs:watch": "shadow-cljs watch crx",
-    "cljs:compile": "shadow-cljs compile crx",
+    "cljs:watch": "shadow-cljs watch app",
+    "cljs:build": "shadow-cljs compile app",
+    "cljs:compile": "shadow-cljs release app",
     "css:build": "cross-env postcss src/css/tailwind.css -o ./public/css/style.css --verbose",
     "css:watch": "cross-env postcss src/css/tailwind.css -o ./public/css/style.css --verbose -w",
-    "css:compile": "cross-env NODE_ENV=production postcss src/css/tailwind.css -o ./public/css/main.css --verbose"
+    "css:compile": "cross-env postcss NODE_ENV=production src/css/tailwind.css -o ./public/css/style.css --verbose -w"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.15",

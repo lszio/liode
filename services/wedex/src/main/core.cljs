@@ -2,7 +2,7 @@
   (:require [goog.dom :as gdom]
             ;; [cljs.pprint :as pp]
             ;; [react :as react]
-            [api.supabase :as sb]
+            ;; [api.supabase :as sb]
             [crx.apis :as api]
             [clojure.string :as s]
             [reagent.core :as r]
@@ -60,7 +60,8 @@
 
 (defn update-bookmarks [l]
   (let [gl (doall (filter bookmark-group? l))
-        bl (doall (filter #(not (bookmark-group? %)) l))]
+        bl (doall (filter #(not (bookmark-group? %)) l))] 
+    (js/console.log (str "update-bookmarks: ") )
     (reset! bs bl)
     (reset! gs gl)))
 
@@ -74,28 +75,26 @@
   (reset! hs h))
 
 (defn on-message [e]
-  (let [data (js->clj (.-data e))
-        command (get data "command")]
-    (js/console.log (str "receive message with command: " command))
-    (case command
-      "update-bookmarks" (-> (get data "value") js->clj update-bookmarks)
+  (let [data (.-data e)
+        type (.-type data)]
+    (case type
+      "update-bookmarks" (update-bookmarks (js->clj (.-payload data)))
+      "wedex-boardcast" "TODO: use postMessageExternal"
       "unknown")))
 
 (defn ^:dev/after-load render []
   (js/window.addEventListener "message" on-message)
-  (prn (.now js/Date))
-  (js/setTimeout 
-   (fn []
-     (-> (js/document.querySelectorAll "link[rel=stylesheet]")
-         (.forEach (fn [l]
-                     (let [href (-> l .-href (.replace #"\?.*|$", (str "?t=" (.now js/Date))))
-                           h (-> l .-href (.replace #"\?.*|$", ""))]
-                       (aset l "href" href)
-                       (aset l "href" h)
-                       (prn (.now js/Date))
-                       ))))) 1000)
-  (api/send-request "bookmarks")
-  (sb/login-with-github)
+  (js/window.postMessage (clj->js {:type "request-bookmarks"} "*"))
+  ;; (js/setTimeout 
+  ;;  (fn []
+  ;;    (-> (js/document.querySelectorAll "link[rel=stylesheet]")
+  ;;        (.forEach (fn [l]
+  ;;                    (let [href (-> l .-href (.replace #"\?.*|$", (str "?t=" (.now js/Date))))
+  ;;                          h (-> l .-href (.replace #"\?.*|$", ""))]
+  ;;                      (aset l "href" href)
+  ;;                      (aset l "href" h)
+  ;;                      (prn (.now js/Date))
+  ;;                      ))))) 1000)
   (rdom/render root [App]))
 
 (defn ^:dev/before-load stop []

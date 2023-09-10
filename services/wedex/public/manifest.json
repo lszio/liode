@@ -3,12 +3,6 @@
   "description": "my chrome extension",
   "version": "0.0.0",
   "manifest_version": 3,
-  "sandbox": {
-    "pages": [
-      "side-panel.html",
-      "index.html"
-    ]
-  },
   "permissions": [
     "activeTab",
     "alarms",
@@ -17,22 +11,27 @@
     "history",
     "storage",
     "sidePanel",
+    "scripting",
     "tabs",
     "tabGroups",
     "webRequest",
     "contextMenus"
   ],
+  "externally_connectable": {
+    "matches": ["*://localhost/*", "https://wedex.vercel.app/*"]
+  },
+  "host_permissions": ["*://*/*"],
   "background": {
     "service_worker": "js/sw.js",
     "type": "module"
   },
+  "web_accessible_resources": [
+    {
+      "resources": ["js/*"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "side_panel": {
     "default_path": "side-panel.html"
-  },
-  "action": {
-    "default_title": "Wedex",
-    "default_popup": "popup.html"
-  },
-  "icons": {
   }
 }
