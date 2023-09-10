@@ -2,7 +2,7 @@
   "extends": "@ferld/ts-config",
   "exclude": [
     "**/node_modules",
-    "**/.eslintrc.js"
+    "**/.eslintrc.js",
   ],
   "include": [
     "**/src",
