@@ -4,13 +4,17 @@ import cookie from "cookie";
 const url = import.meta.env.PUBLIC_SUPABASE_URL;
 const key = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(url, key, {
+export const supabase = url && key ? createClient(url, key, {
   auth: {
     persistSession: false // TODO
   }
-});
+}) : null;
 
 export async function getUser(request: Request) {
+  if (!supabase) {
+    return;
+  }
+
   const c = cookie.parse(request.headers.get("cookie") ?? "");
 
   if (!c.sbat)
