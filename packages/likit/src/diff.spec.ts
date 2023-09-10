@@ -1,5 +1,5 @@
 import { describe, expect, test, vi as spy } from "vitest";
-import { EditType, getEditOperations, withDifferents } from "./likit";
+import { EditType, getEditOperations, withDifferents } from "./diff";
 
 describe("likit", () => {
   test.each([

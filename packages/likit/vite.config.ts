@@ -9,7 +9,7 @@ export default defineConfig(() => {
     },
     build: {
       lib: {
-        entry: "src/likit",
+        entry: "src/index",
         name: "likit",
         fileName: format => `likit.${format}.js`
       }

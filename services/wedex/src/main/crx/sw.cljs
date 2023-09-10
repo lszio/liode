@@ -1,22 +1,48 @@
 (ns crx.sw
-  [:require [shadow.cljs.modern :refer (js-await)]])
+  [:require 
+   [shadow.cljs.modern :refer (js-await)]
+   [clojure.string :as s]])
 
-(defn onMessage [event]
-  (js/console.log event))
+(goog-define REDIRECT_URL "localhost")
 
-(defn get-windows []
-  #_{:clj-kondo/ignore [:unresolved-symbol]}
+(defonce tabs (atom #js []))
+(defonce windows (atom #js []))
+(defonce bookmarks (atom #js []))
+(defonce bookmark-tree (atom []))
+
+(defn get-windows-from-chrome []
   (js-await [windows (js/chrome.windows.getAll)]
-            (js/console.log windows)))
+    (js/console.log windows)))
 
-(defn open-index-tab []
-  (js/chrome.runtime.onInstalled.addListener
-    #(js/chrome.tabs.create #js {:url "wrapper.html" :pinned true :active true :index 0})))
+(defn get-tabs-from-chrome []
+  (js-await [ts (js/chrome.tabs.query #js {})]
+            (reset! tabs ts)))
 
-(defn start []
-  (open-index-tab)
-  (get-windows)
-  (js/addEventListener "message" onMessage))
+(defn get-bookmarks-from-chrome []
+  (js/chrome.bookmarks.search #js {} #(reset! bookmarks %)))
+
+(defn get-bookmark-tree-from-chrome [])
+
+;; TODO: use onMessageExternal or onConnectExternal
+(defn on-message [m s c]
+  (js/console.log m s c)
+  (c (case (.-type m)
+       "update-bookmarks" @bookmarks
+       "unknown")))
+
+(defn on-installed []
+  (js/chrome.scripting.registerContentScripts
+   (clj->js [{:id "message-broker"
+              :js ["js/cs.js"]
+              :matches ["*://*/*"]}])))
 
 (defn init []
-  (start))
+  (get-bookmarks-from-chrome)
+  (js/chrome.bookmarks.onMoved.addListener get-bookmarks-from-chrome)
+  (js/chrome.bookmarks.onChanged.addListener get-bookmarks-from-chrome)
+  (js/chrome.bookmarks.onCreated.addListener get-bookmarks-from-chrome)
+  (js/chrome.bookmarks.onRemoved.addListener get-bookmarks-from-chrome)
+  (js/chrome.bookmarks.onImportEnded.addListener get-bookmarks-from-chrome)
+
+  (js/chrome.runtime.onMessage.addListener on-message)
+  (js/chrome.runtime.onInstalled.addListener on-installed))

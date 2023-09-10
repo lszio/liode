@@ -1,7 +1,5 @@
 (ns crx.apis)
 
-(defn request-bookmarks [] 
-  (js/window.parent.postMessage #js {:command "request-bookmarks"} "*"))
+(defonce chrome? (not (nil? js/chrome.runtime)))
 
-(defn send-request [value]
-  (js/window.parent.postMessage #js {:command "request" :value value} "*"))
+;; (defonce chrome-port (when chrome? (js/chrome.runtime.connect)))

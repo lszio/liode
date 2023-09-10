@@ -1,27 +1,31 @@
 ;; shadow-cljs configuration
-{:source-paths
- ["src/dev"
-  "src/main"
-  "src/test"]
+{:source-paths ["src/dev"
+                "src/main"
+                "src/test"]
 
- :dependencies
- [[reagent "1.2.0"]]
+ :dependencies [[reagent "1.2.0"]]
 
- :builds
- {:crx {:target :esm
-        :output-dir "public/js"
-        :js-options {:js-package-dirs ["node_modules", "../../node_modules"]}
-        :closure-defines {api.supabase/SUPABASE_URL #shadow/env "PUBLIC_SUPABASE_URL"
-                          api.supabase/SUPABASE_ANON_KEY #shadow/env "PUBLIC_SUPABASE_ANON_KEY"}
-        :modules
-        {:shared {:entries [crx.dev]}
-         :sp {:init-fn crx.sp/init
-              :depends-on #{:shared}}
-         :sw {:init-fn crx.sw/init
-              :depends-on #{:shared}}
-         :core {:init-fn core/init
-                :depends-on #{:shared}}
-         :popup {:init-fn  crx.popup/init
-                 :depends-on #{:shared}}
-         :wrapper {:init-fn  crx.wrapper/init
-                   :depends-on #{:shared}}}}}}
+ :dev-http {7991 "public"}
+
+ :closure-defines {api.supabase/SUPABASE_URL #shadow/env "PUBLIC_SUPABASE_URL"
+                   api.supabase/SUPABASE_ANON_KEY #shadow/env "PUBLIC_SUPABASE_ANON_KEY"}
+
+ :dev {:closure-defines {crx.sw/REDIRECT_URL "http://localhost:7991"}}
+ :release {:closure-defines {crx.sw/REDIRECT_URL "https://wedex.vercel.app"}}
+
+ :js-options {:js-package-dirs ["node_modules", "../../node_modules"]}
+
+ :builds {:crx {:target :browser
+                :output-dir "public/js"
+                :asset-path "/js"
+                :runtime "custom"
+
+                :modules {:cs {:init-fn crx.cs/init}}}
+
+          :app {:target :esm
+                :output-dir "public/js"
+
+                :modules {:shared {:entries []}
+                          :core {:init-fn core/init :depends-on #{:shared}}
+                          :sp {:init-fn crx.sp/init :depends-on #{:shared}}
+                          :sw {:init-fn crx.sw/init :depends-on #{:shared}}}}}}
