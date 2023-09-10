@@ -12,7 +12,7 @@
     "cljs:compile": "shadow-cljs release app",
     "css:build": "cross-env postcss src/css/tailwind.css -o ./public/css/style.css --verbose",
     "css:watch": "cross-env postcss src/css/tailwind.css -o ./public/css/style.css --verbose -w",
-    "css:compile": "cross-env postcss NODE_ENV=production src/css/tailwind.css -o ./public/css/style.css --verbose -w"
+    "css:compile": "cross-env postcss NODE_ENV=production src/css/tailwind.css -o ./public/css/style.css --verbose"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.15",
