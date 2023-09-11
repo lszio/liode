@@ -22,12 +22,12 @@
   },
   "host_permissions": ["*://*/*"],
   "background": {
-    "service_worker": "js/sw.js",
+    "service_worker": "cljs/sw.js",
     "type": "module"
   },
   "web_accessible_resources": [
     {
-      "resources": ["js/*"],
+      "resources": ["cljs/*", "js/*", "css/*", "*.html"],
       "matches": ["<all_urls>"]
     }
   ],

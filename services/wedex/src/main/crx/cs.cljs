@@ -1,6 +1,14 @@
 (ns crx.cs)
 
+(defn createCommandPalette []
+  (let [e (js/document.createElement "div")]
+    (aset e "id" "wedex-command-palette")
+    (aset e "innerHTML" "")
+    (js/document.body.appendChild e)
+    e))
+
 (defonce wedex? (not (nil? (js/document.getElementById "wedex"))))
+(defonce element (createCommandPalette))
 
 (defn send-to-worker [m c] (js/chrome.runtime.sendMessage m c))
 
@@ -23,6 +31,9 @@
 
 (defn init []
   (js/console.log "inject wedex content script")
+  (when (nil? (js/document.getElementById "wedex-command-palette"))
+    (js/console.log "no command palette")
+    (let [cp ()]))
   (when wedex?
     (update-bookmarks)
     (js/window.addEventListener "message" on-window-message)))

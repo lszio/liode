@@ -15,6 +15,7 @@
     (js/console.log windows)))
 
 (defn get-tabs-from-chrome []
+  #_{:clj-kondo/ignore [:unresolved-symbol]}
   (js-await [ts (js/chrome.tabs.query #js {})]
             (reset! tabs ts)))
 
@@ -33,7 +34,7 @@
 (defn on-installed []
   (js/chrome.scripting.registerContentScripts
    (clj->js [{:id "message-broker"
-              :js ["js/cs.js"]
+              :js ["js/csw.js"]
               :matches ["*://*/*"]}])))
 
 (defn init []

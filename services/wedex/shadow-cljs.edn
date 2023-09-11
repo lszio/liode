@@ -15,17 +15,12 @@
 
  :js-options {:js-package-dirs ["node_modules", "../../node_modules"]}
 
- :builds {:crx {:target :browser
-                :output-dir "public/js"
-                :asset-path "/js"
-                :runtime "custom"
-
-                :modules {:cs {:init-fn crx.cs/init}}}
-
-          :app {:target :esm
-                :output-dir "public/js"
+ :builds {:app {:target :esm
+                :output-dir "public/cljs"
+                :runtime :custom
 
                 :modules {:shared {:entries []}
                           :core {:init-fn core/init :depends-on #{:shared}}
+                          :cs {:init-fn crx.cs/init :depends-on #{:shared}}
                           :sp {:init-fn crx.sp/init :depends-on #{:shared}}
                           :sw {:init-fn crx.sw/init :depends-on #{:shared}}}}}}
