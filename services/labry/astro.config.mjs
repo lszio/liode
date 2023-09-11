@@ -14,9 +14,4 @@ export default defineConfig({
   integrations: [mdx(), org({}), vue(), react(), tailwind(), sitemap()],
   output: "server",
   adapter: vercel(),
-  vite: {
-    ssr: {
-      // noExternal: ["linkedom"] // FIXME: for elm deps
-    }
-  }
 });
