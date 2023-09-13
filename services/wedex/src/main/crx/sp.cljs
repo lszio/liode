@@ -1,4 +1,4 @@
-(ns crx.sp
+(ns ^:dev/once crx.sp
   (:require [goog.dom :as gdom]
             [reagent.dom.client :as rdom]))
 
@@ -8,7 +8,7 @@
   [:main.container 
    [:h1 "Hello Side Panel"]])
 
-(defn ^:dev/after-load render []
+(defn render []
   (js/console.log "render")
   (rdom/render root [app]))
 

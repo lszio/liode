@@ -39,16 +39,16 @@
   (let [search (r/atom "")]
     (fn []
       [:div.bookmark-list
-      [:input.w-full.h-8.border-zinc-200.border-2
-       {:default-value @search 
-        :on-change #(->> % .-target .-value (reset! search))}]
-      [:ul.divide-y.divide-dashed
-        (for [b (doall (filter #(match-with-text % @search) @bs))]
-          [:li.h-8.flex.flex-row.align-middle.cursor-pointer 
-           {:key (get b "id") 
-            :on-click #(js/window.open (get b "url") "_blank")}
-          [:span.h-full.inline-block.grow.truncate {} (get b "title")]
-          [:div.h-full.groups (get b "group")]])]])))
+       [:input.w-full.h-8.border-zinc-200.border-2
+        {:default-value @search 
+         :on-change #(->> % .-target .-value (reset! search))}]
+       [:ul.divide-y.divide-dashed
+         (for [b (doall (filter #(match-with-text % @search) @bs))]
+           [:li.h-8.flex.flex-row.align-middle.cursor-pointer 
+            {:key (get b "id") 
+             :on-click #(js/window.open (get b "url") "_blank")}
+            [:span.h-full.inline-block.grow.truncate {} (get b "title")]
+            [:div.h-full.groups (get b "group")]])]])))
 
 (defn App []
   [:main.min-h-screen.px-10
@@ -61,7 +61,7 @@
 (defn update-bookmarks [l]
   (let [gl (doall (filter bookmark-group? l))
         bl (doall (filter #(not (bookmark-group? %)) l))] 
-    (js/console.log (str "update-bookmarks: ") )
+    (js/console.log (str "update-bookmarks: "))
     (reset! bs bl)
     (reset! gs gl)))
 

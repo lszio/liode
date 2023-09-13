@@ -1,4 +1,4 @@
-(ns crx.cs)
+(ns ^:dev/once crx.cs)
 
 (defn createCommandPalette []
   (let [e (js/document.createElement "div")]

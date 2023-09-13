@@ -1,4 +1,4 @@
-(ns crx.sw
+(ns ^:dev/once crx.sw
   [:require 
    [shadow.cljs.modern :refer (js-await)]
    [clojure.string :as s]])

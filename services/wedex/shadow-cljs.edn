@@ -17,7 +17,8 @@
 
  :builds {:app {:target :esm
                 :output-dir "public/cljs"
-                :runtime :custom
+                :devtools {:use-document-host false
+                           :preloads []}
 
                 :modules {:shared {:entries []}
                           :core {:init-fn core/init :depends-on #{:shared}}
