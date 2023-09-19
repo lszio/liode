@@ -1,5 +1,6 @@
 (ns ^:dev/once crx.sw
   [:require 
+   [promesa.core :as p]
    [shadow.cljs.modern :refer (js-await)]
    [clojure.string :as s]])
 
