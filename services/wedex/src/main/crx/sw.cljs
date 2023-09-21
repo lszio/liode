@@ -1,36 +1,46 @@
 (ns ^:dev/once crx.sw
   [:require 
-   [promesa.core :as p]
-   [shadow.cljs.modern :refer (js-await)]
-   [clojure.string :as s]])
+   [data.core :as data]
+   [promesa.core :as p]])
 
-(goog-define REDIRECT_URL "localhost")
+;; (goog-define REDIRECT_URL "localhost")
+(defonce chrome? (not (nil? js/chrome)))
 
-(defonce tabs (atom #js []))
-(defonce windows (atom #js []))
-(defonce bookmarks (atom #js []))
-(defonce bookmark-tree (atom []))
+(defonce ports (atom #{}))
 
-(defn get-windows-from-chrome []
-  (js-await [windows (js/chrome.windows.getAll)]
-    (js/console.log windows)))
+(defn query-all []
+  (if chrome? [(js/chrome.windows.getAll)
+               (js/chrome.tabs.query #js {})
+               (js/chrome.bookmarks.search #js {})
+               (js/chrome.history.search #js {:text "" :maxResults 2000})]
+      [])) ;; TODO: firefox?
 
-(defn get-tabs-from-chrome []
-  #_{:clj-kondo/ignore [:unresolved-symbol]}
-  (js-await [ts (js/chrome.tabs.query #js {})]
-            (reset! tabs ts)))
+(defn refresh-actions []
+  (data/reset-actions)
+  (p/-> (p/all (query-all))
+        (js->clj :keywordize-keys true)
+        flatten
+        data/mark-actions
+        data/insert-actions
+        prn)
+  )
 
-(defn get-bookmarks-from-chrome []
-  (js/chrome.bookmarks.search #js {} #(reset! bookmarks %)))
+(defn on-port-message [m p]
+  (js/console.log "Port Message: " m p))
 
-(defn get-bookmark-tree-from-chrome [])
+(defn on-port-disconnect [p]
+  (js/console.log "Port Disconnect" p)
+  (swap! ports disj p))
 
-;; TODO: use onMessageExternal or onConnectExternal
-(defn on-message [m s c]
-  (js/console.log m s c)
-  (c (case (.-type m)
-       "update-bookmarks" @bookmarks
-       "unknown")))
+(defn on-external-message [m s c]
+  (js/console.log "external message" m s c)
+  (c "back result"))
+
+(defn on-connect [^js port]
+  (js/console.log "New port connection: " port)
+  (swap! ports conj port)
+  (-> port .-onMessage (.addListener on-port-message))
+  (-> port .-onDisconnect (.addListener on-port-disconnect)))
 
 (defn on-installed []
   (js/chrome.scripting.registerContentScripts
@@ -39,12 +49,17 @@
               :matches ["*://*/*"]}])))
 
 (defn init []
-  (get-bookmarks-from-chrome)
-  (js/chrome.bookmarks.onMoved.addListener get-bookmarks-from-chrome)
-  (js/chrome.bookmarks.onChanged.addListener get-bookmarks-from-chrome)
-  (js/chrome.bookmarks.onCreated.addListener get-bookmarks-from-chrome)
-  (js/chrome.bookmarks.onRemoved.addListener get-bookmarks-from-chrome)
-  (js/chrome.bookmarks.onImportEnded.addListener get-bookmarks-from-chrome)
+  (prn "init")
+  (refresh-actions)
+  ;; (js/chrome.bookmarks.onMoved.addListener get-bookmarks-from-chrome)
+  ;; (js/chrome.bookmarks.onChanged.addListener get-bookmarks-from-chrome)
+  ;; (js/chrome.bookmarks.onCreated.addListener get-bookmarks-from-chrome)
+  ;; (js/chrome.bookmarks.onRemoved.addListener get-bookmarks-from-chrome)
+  ;; (js/chrome.bookmarks.onImportEnded.addListener get-bookmarks-from-chrome)
 
-  (js/chrome.runtime.onMessage.addListener on-message)
+  ;; (js/chrome.runtime.onMessage.addListener on-message)
+
+  (js/chrome.runtime.onMessageExternal.addListener on-external-message)
+
+  (js/chrome.runtime.onConnectExternal.addListener on-connect)
   (js/chrome.runtime.onInstalled.addListener on-installed))

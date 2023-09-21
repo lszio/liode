@@ -30,7 +30,7 @@
 
 (defn ^:export CommandPalette [conn]
   (let [search (r/atom "")
-        current (r/atom -1)
+        ;; current (r/atom -1)
         cs (r/atom [])] 
     (add-watch conn :watcher #(reset! cs (do-query @conn @search)))
     (add-watch search :watcher #(reset! cs (do-query @conn @search)))
