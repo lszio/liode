@@ -38,7 +38,7 @@
          data :data} (js->clj m :keywordize-keys true)]
     (prn "Port Message: " type data p)
     (case type
-      "query-actions" (send-response {:type "update-actions" :data (d/query-actions data)} p))))
+      "query-actions" (send-response {:type "update-actions" :data (flatten (d/query-actions data))} p))))
 
 (defn on-port-disconnect [p]
   (js/console.log "Port Disconnect" p)
@@ -51,7 +51,7 @@
 (defn on-connect [^js port]
   (js/console.log "New port connection: " port)
   (swap! ports conj port)
-  (send-response {:type :ping :data [1 2 3]} port)
+  ;; (send-response {:type :ping :data [1 2 3]} port)
   (-> port .-onMessage (.addListener on-port-message))
   (-> port .-onDisconnect (.addListener on-port-disconnect)))
 

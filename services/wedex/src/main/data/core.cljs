@@ -135,11 +135,8 @@
 
 (comment
   (mg/generate window-schema)
+
   (read-string
     (str 
-      (read-string "[:find (pull ?e [*]) :where [?e :a :b]]"))) 
-  (def cb (atom #(prn %)))
-
-  (count '[1 2 3])
-
-  (prn "asdf"))
+     (read-string "[:find (pull ?e [*]) :where [?e :a :b]]"))) 
+  )

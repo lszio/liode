@@ -1,6 +1,5 @@
 (ns core
   (:require [goog.dom :as gdom]
-            [datascript.core :as d]
             ;; [reagent.core :as r]
             [clojure.string :as s]
             [reagent.dom.client :as rdom]
@@ -12,21 +11,20 @@
 (defonce root (rdom/create-root (gdom/getElement "app")))
 (defonce chrome? (not (nil? js/chrome)))
 
-(defonce actions (atom []))
-(defonce search (atom '[]))
+(defonce query-pattern (atom '[:find [(pull ?e [* :db/id :as :key]) ...]  :where [?e :kind :bookmark]]))
 (defonce update-actions (atom #(prn "update actions: count = " (count %))))
 
 (defn App []
   [:main.min-h-screen.px-10
-   [Clock]])
-  ;;  [CommandPalette actions]
+   [Clock]
+   [CommandPalette update-actions]])
 
 (defn send-request [r] (.postMessage @port (clj->js r)))
 
 (defn query-actions []
   (send-request 
    {:type "query-actions" 
-    :data (str '[:find (pull ?e [*]) :where [?e :kind :window]])}))
+    :data (str @query-pattern)}))
 
 (defn on-message [e]
   (let [data (.-data e)
@@ -49,6 +47,7 @@
   (let [{type :type data :data} (js->clj m :keywordize-keys true)]
     (prn "Message from port: " type data)
     (case type
+      "ping" (prn "ping from worker")
       "update-actions" (@update-actions data))))
 
 (defn initialize-connect [^js port]
@@ -58,7 +57,7 @@
 
 (defn ^:dev/after-load render []
   (js/window.addEventListener "message" on-message)
-  (reset! brx-id @brx-id)
+  ;; (reset! brx-id @brx-id)
   (rdom/render root [App]))
 
 (defn ^:dev/before-load stop [] 
