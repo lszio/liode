@@ -14,24 +14,24 @@
 
 (defonce actions (atom []))
 (defonce search (atom '[]))
+(defonce update-actions (atom #(prn "update actions: count = " (count %))))
 
 (defn App []
   [:main.min-h-screen.px-10
-   [Clock]
+   [Clock]])
   ;;  [CommandPalette actions]
-   ])
 
-;; (defn update-bookmarks [l]
-;;   (d/reset-conn! conn (d/empty-db (d/schema (d/db conn))))
-;;   (d/transact! conn (map #(assoc % :kind :bookmark) l))
-;;   (js/console.log (str "update-bookmarks: ")))
+(defn send-request [r] (.postMessage @port (clj->js r)))
+
+(defn query-actions []
+  (send-request 
+   {:type "query-actions" 
+    :data (str '[:find (pull ?e [*]) :where [?e :kind :window]])}))
 
 (defn on-message [e]
   (let [data (.-data e)
         type (.-type data)]
     (case type
-      ;; "update-bookmarks" (update-bookmarks (js->clj (.-payload data) :keywordize-keys true))
-      ;; "wedex-boardcast" "TODO: use postMessageExternal"
       "unknown")))
 
 (defn- refresh-style []
@@ -45,9 +45,16 @@
                        (aset l "href" h)
                        (prn (.now js/Date))))))) 1000))
 
-(defn post-connect [port]
+(defn on-port-message [m]
+  (let [{type :type data :data} (js->clj m :keywordize-keys true)]
+    (prn "Message from port: " type data)
+    (case type
+      "update-actions" (@update-actions data))))
+
+(defn initialize-connect [^js port]
   (js/console.log "connect to" port)
-  )
+  (.addListener (.-onMessage port) on-port-message)
+  (query-actions))
 
 (defn ^:dev/after-load render []
   (js/window.addEventListener "message" on-message)
@@ -60,24 +67,25 @@
 (defn on-wedex-event [^js e]
   (let [detail (.-detail e)
         kind (.-kind detail)
-        id (.-brxId detail)]
+        id (.-brxId detail)] 
     (case kind
-      "ping"  (reset! brx-id id))))
+      "ping" (reset! brx-id id))))
+
+(defn on-port-changed [_ _ ^js o ^js n]
+  (when (not (nil? o)) (.disconnect o))
+  (when (not (nil? n)) (initialize-connect @port)))
+
+(defn on-brx-id-changed [_ _ o n]
+  (when (not (= o n))
+    (when (and (not (s/blank? o)) (not (nil? @port)))
+      (reset! port nil))
+    (when (not (s/blank? n))
+      (if chrome?
+        (reset! port (js/chrome.runtime.connect n))
+        (js/console.error "TODO: firefox?")))))
 
 (defn init []
   (js/document.body.addEventListener "wedex" on-wedex-event)
-  (add-watch port :reset
-             (fn [_ _ ^js o ^js n]
-               (when (not (nil? o)) (.disconnect o))
-               (when (not (nil? n)) (post-connect port))))
-  (add-watch brx-id :reset 
-             (fn [_ _ o n]
-               (when (not (= o n))
-                 (when (and (not (s/blank? o))
-                            (not (nil? @port)))
-                   (reset! port nil))
-                 (when (not (s/blank? n))
-                   (if chrome?
-                     (reset! port (js/chrome.runtime.connect n))
-                     (js/console.error "TODO: firefox?"))))))
+  (add-watch port :reset on-port-changed)
+  (add-watch brx-id :reset on-brx-id-changed)
   (render))

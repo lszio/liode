@@ -1,5 +1,7 @@
 (ns ^:dev/once data.core
   (:require [malli.core :as m]
+            [cljs.reader :refer (read-string)]
+            [malli.generator :as mg]
             [datascript.core :as d]))
 
 (def actions (d/create-conn {}))
@@ -19,21 +21,20 @@
    [:top int?]
    [:left int?]
    [:width int?]
-   [:height int?]]
-  )
+   [:height int?]])
 
 (def tab-schema
   [:map
    {:title "Tab"}
    [:id int?]
    [:index int?]
-   [:groudId int?]
+   [:groupId  int?]
    [:windowId int?]
 
    [:url string?]
    [:status string?]
    [:title string?]
-   [:favIconUrl string?]
+   [:favIconUrl {:optional true} string?]
 
    [:pinned boolean?]
    [:active boolean?]
@@ -53,11 +54,11 @@
   [:map
    {:title "Bookmark"}
 
-   [:id int?]
+   [:id [:or string? int?]]
    [:index int?]
-   [:parentId int?]
+   [:parentId [:or string? int?]]
    [:dateAdded int?]
-   [:dateLastUsed int?]
+   [:dateLastUsed {:optional true} int?]
 
    [:url string?]
    [:title string?]])
@@ -66,19 +67,19 @@
   [:map
    {:title "Group"}
 
-   [:id int?]
+   [:id [:or int? string?]]
    [:index int?]
-   [:parentId int?]
+   [:parentId [:or string? int?]]
 
    [:dateAdded int?]
-   [:dateGroupModified int?]
+   [:dateGroupModified {:optional true} int?]
 
    [:title string?]])
 
 (def history-schema
   [:map
    {:title "History"}
-   [:id int?]
+   [:id [:or int? string?]]
 
    [:typedCount int?]
    [:visitCount int?]
@@ -89,9 +90,9 @@
    [:title string?]])
 
 (def tab? (m/validator tab-schema))
+(def group? (m/validator group-schema))
 (def window? (m/validator window-schema))
 (def history? (m/validator history-schema))
-(def group? (m/validator group-schema))
 (def bookmark? (m/validator bookmark-schema))
 
 (defn reset-actions [] 
@@ -104,8 +105,8 @@
 
 (defn mark-action [a]
   (assoc a :kind (cond 
-                   (tab? a) :tab
                    (bookmark? a) :bookmark
+                   (tab? a) :tab
                    (group? a) :group
                    (history? a) :history
                    (window? a) :window
@@ -113,73 +114,32 @@
 
 (defn mark-actions [as] (map mark-action as))
 
-;; (group? {:id 1 :kind :group :index 0 :title "adf" :parentId 123 :dateAdded 123 :dateGroupModified 2})
+(defn query-actions [q]
+  (d/q (if (string? q) 
+         (read-string q) 
+         q) 
+       @actions))
+
+(defn query-kind [k]
+  (d/q '[:find (count ?e). :in $ ?k :where [?e :kind ?k]] @actions k))
+
+(defn summarize []
+  (let [[wc bc tc uc gc hc] (map query-kind [:window :bookmark :tab :unknown :group :history])]
+    {:window wc
+     :history hc
+     :bookmark bc
+     :unknown uc
+     :group gc
+     :tab tc
+     :count (+ wc hc bc uc tc)}))
 
 (comment
-  ;; (d/reset-conn! conn (d/empty-db (d/schema (d/db conn))))
+  (mg/generate window-schema)
+  (read-string
+    (str 
+      (read-string "[:find (pull ?e [*]) :where [?e :a :b]]"))) 
+  (def cb (atom #(prn %)))
 
-  ;; ;; (d/pull-many db '[*] [1])
-  ;; (d/pull @conn '[*] 2)
-  ;; (d/transact! conn [{:a 2 :b 3}
-  ;;                    {:a 9 :b 1000}])
+  (count '[1 2 3])
 
-  ;; (d/transact! conn [{:db/retract 2}])
-
-  ;; (d/q '[:find (pull ?e [*])
-  ;;        :in $ ?v
-  ;;        :where
-  ;;        [?e :b ?b]
-  ;;        [?e :a ?a]
-  ;;        (or [(= ?b ?v)]
-  ;;            [(= ?a ?v)])]
-  ;;      @conn
-  ;;      1000)
-
-
-  (defonce action-schema
-    [:map
-     {:title "Action"}
-     [:uuid string?]
-     [:name string?]
-     [:type string?]
-     [:tags [:set string?]]
-     [:args [:map]]
-     [:time [:map
-             [:create int?]
-             [:modify int?]
-             [:access int?]]]])
-
-  (defn parse-time [i]
-    (let [{create "dataAdded"
-           access "dataLastUsed"
-           :or {create (js/Date.now)}
-           :as all} i]
-      (prn all)
-      {:create create
-       :modify (or create)
-       :access (or access)}))
-
-  (parse-time (js->clj {"dataAdded" 123416} :keywordize-keys true))
-
-  (defn bookmark-to-action [b]
-    (let [{id :id title :title} b]
-      {:id id
-       :type :bookmark
-       :name title
-       :kind :group
-       :args {}
-       :time {}}))
-
-  (let [{:keys [id name]}
-        (js->clj #js {:id "qwer" :name "zxcv"})]
-    {:id id :name name})
-  )
-
-
-(comment 
-  '[1 2 3]
-  '[e d]
-
-  (conj '[e d] 'f)
-
-  [1 2 3])
+  (prn "asdf"))
