@@ -1,50 +1,40 @@
 (ns components.action
-  (:require [datascript.core :as d]
+  (:require [clojure.string :as s]
             [reagent.core :as r]))
 
-(defn do-query 
-  ([db] (do-query db ""))
-  ([db s] (do-query db s '[*]))
-  ([db s p]
-   (let [q '[:find [(pull ?e p) ...]
-             :in $ ?s p
-             :where
-             [?e :url ?u]
-             [?e :title ?t]
-             (or [(clojure.string/includes? ?u ?s)]
-                 [(clojure.string/includes? ?t ?s)])]
-         cs (d/q q db s (or p '[*]))]
-     cs)))
+;; (defn do-query 
+;;   ([db] (do-query db ""))
+;;   ([db s] (do-query db s '[*]))
+;;   ([db s p]
+;;    (let [q '[:find [(pull ?e p) ...]
+;;              :in $ ?s p
+;;              :where
+;;              [?e :url ?u]
+;;              [?e :title ?t]
+;;              (or [(clojure.string/includes? ?u ?s)]
+;;                  [(clojure.string/includes? ?t ?s)])]
+;;          cs (d/q q db s (or p '[*]))]
+;;      cs)))
 
-(defn BookmarkAction [action]
-  (let [{url :url
-         title :title
-         group :group } action] 
-    ;; (prn action key title)
+(defn on-action-click [a e]
+  (let [{k :kind} a]
+    (case k
+      "bookmark" (js/window.open (:url a) "_blank"))))
+
+(defn ActionIcon [action]
+  [:span.min-w-8.min-h-8.rounded-full.bg-slate-100.px-3 (-> action :kind first s/upper-case)])
+
+(defn CommandItem [action]
+  (let [{title :title
+         url :url
+         group :group } action]
     [:li.h-8.flex.flex-row.align-middle.cursor-pointer
      {:title url
-      :on-click #(js/window.open url "_blank")}
-     [:span {} "B: "]
+      :on-click #(on-action-click action %)}
+     [ActionIcon action]
      [:span.h-full.inline-block.grow.truncate {} title]
      [:div.h-full.groups {} group]]))
 
-(defn WindowAction [action]
-  (let [{url :url
-         title :title
-         group :group
-         key :db/id } action]
-    [:li.h-8.flex.flex-row.align-middle.cursor-pointer
-     {:title url
-      :on-click #(js/window.open url "_blank")}
-     [:span {} "W: "]
-     [:span.h-full.inline-block.grow.truncate {} title]
-     [:div.h-full.groups {} group]]))
-
-(defn UnknownAction [action]
-  [:li.h-8.flex.flex-row.align-middle.cursor-pointer
-     {:key key}
-     [:span {} "U: "]
-     [:span.h-full.inline-block.grow.truncate {} "Unknown"]])
 
 (defn ^:export CommandPalette [update-actions]
   (let [search (r/atom "")
@@ -60,4 +50,4 @@
         (for [c @actions]
           (let [{kind :kind
                  key :id} c] 
-            ^{:key key} [(case kind "bookmark" BookmarkAction "window" WindowAction UnknownAction) c]))]])))
+            ^{:key key} [CommandItem c]))]])))

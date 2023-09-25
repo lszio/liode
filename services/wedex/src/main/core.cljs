@@ -11,7 +11,7 @@
 (defonce root (rdom/create-root (gdom/getElement "app")))
 (defonce chrome? (not (nil? js/chrome)))
 
-(defonce query-pattern (atom '[:find [(pull ?e [* :db/id :as :key]) ...]  :where [?e :kind :bookmark]]))
+(defonce query-pattern (atom '[:find [(pull ?e [*]) ...]  :where [?e :kind :bookmark]]))
 (defonce update-actions (atom #(prn "update actions: count = " (count %))))
 
 (defn App []
@@ -19,7 +19,9 @@
    [Clock]
    [CommandPalette update-actions]])
 
-(defn send-request [r] (.postMessage @port (clj->js r)))
+(defn send-request [r]
+  (when @port
+    (.postMessage @port (clj->js r))))
 
 (defn query-actions []
   (send-request 
@@ -58,6 +60,7 @@
 (defn ^:dev/after-load render []
   (js/window.addEventListener "message" on-message)
   ;; (reset! brx-id @brx-id)
+  (query-actions)
   (rdom/render root [App]))
 
 (defn ^:dev/before-load stop [] 
@@ -83,7 +86,7 @@
         (reset! port (js/chrome.runtime.connect n))
         (js/console.error "TODO: firefox?")))))
 
-(defn init []
+(defn ^:export init []
   (js/document.body.addEventListener "wedex" on-wedex-event)
   (add-watch port :reset on-port-changed)
   (add-watch brx-id :reset on-brx-id-changed)
