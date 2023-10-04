@@ -5,7 +5,9 @@ export const client = createClient(
   import.meta.env.PUBLIC_SUPABASE_ANON_KEY,
   {
     auth: {
-      persistSession: false // TODO
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: true
     }
   });
 

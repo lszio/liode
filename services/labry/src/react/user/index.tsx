@@ -1,20 +1,25 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useStore } from "@nanostores/react";
 import { supabase } from "../../libs";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
+import { $session, $user } from "../../store";
 
 export default function User() {
-  const [session, setSession] = useState<any>(null);
+  const session = useStore($session);
+  const user = useStore($user);
 
   useEffect(() => {
     supabase.getSession().then(({ data: { session } }) => {
-      setSession(session);
+      $session.set(session);
+      $user.set(session.user);
     });
 
     const {
       data: { subscription },
     } = supabase.client.auth.onAuthStateChange((_, session) => {
-      setSession(session);
+      $session.set(session);
+      $user.set(session.user);
     });
 
     return () => subscription.unsubscribe();
@@ -29,6 +34,6 @@ export default function User() {
       />
     );
   } else {
-    return <div>Logged in!</div>;
+    return <div>Logged in as {user.email}</div>;
   }
 }
