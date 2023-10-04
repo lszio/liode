@@ -288,6 +288,12 @@ importers:
       '@orgajs/astro':
         specifier: ^1.1.0
         version: 1.1.0(rollup@3.29.1)
+      '@supabase/auth-ui-react':
+        specifier: ^0.4.5
+        version: 0.4.5(@supabase/supabase-js@2.33.1)
+      '@supabase/auth-ui-shared':
+        specifier: ^0.1.7
+        version: 0.1.7(@supabase/supabase-js@2.33.1)
       '@supabase/supabase-js':
         specifier: ^2.33.1
         version: 2.33.1
@@ -303,6 +309,9 @@ importers:
       elm:
         specifier: 0.19.1-5
         version: 0.19.1-5
+      nanostores:
+        specifier: ^0.9.3
+        version: 0.9.3
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -3669,6 +3678,31 @@ packages:
     dependencies:
       type-detect: 4.0.8
     dev: true
+
+  /@stitches/core@1.2.8:
+    resolution: {integrity: sha512-Gfkvwk9o9kE9r9XNBmJRfV8zONvXThnm1tcuojL04Uy5uRyqg93DC83lDebl0rocZCfKSjUv+fWYtMQmEDJldg==}
+    dev: false
+
+  /@supabase/auth-ui-react@0.4.5(@supabase/supabase-js@2.33.1):
+    resolution: {integrity: sha512-p7mZoD/iJKP7KorQ4F/RK4NfWDpXzop+LhMuHxkO5BahD+VpGIxwtykuXfZ0g7rijaKnA1BimdCBTCrV5EWTag==}
+    peerDependencies:
+      '@supabase/supabase-js': ^2.21.0
+    dependencies:
+      '@stitches/core': 1.2.8
+      '@supabase/auth-ui-shared': 0.1.7(@supabase/supabase-js@2.33.1)
+      '@supabase/supabase-js': 2.33.1
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /@supabase/auth-ui-shared@0.1.7(@supabase/supabase-js@2.33.1):
+    resolution: {integrity: sha512-ueqyfCHVYX/ioehwL1ErH0+cZwiSzsIfZfhf326yJdDI0XExTKPV4lxPtWT1xx6c8A4FPPmT3kJKQaWs27pxCw==}
+    peerDependencies:
+      '@supabase/supabase-js': ^2.21.0
+    dependencies:
+      '@supabase/supabase-js': 2.33.1
+    dev: false
 
   /@supabase/functions-js@2.1.4:
     resolution: {integrity: sha512-5EEhei1hFCMBX4Pig4kGKjJ59DZvXwilcIBYYp4wyK/iHdAN6Vw9di9VN6/oRXRVS/6jgZd0jdmI+QgGGSxZsA==}
@@ -12683,6 +12717,11 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /nanostores@0.9.3:
+    resolution: {integrity: sha512-KobZjcVyNndNrb5DAjfs0WG0lRcZu5Q1BOrfTOxokFLi25zFrWPjg+joXC6kuDqNfSt9fQwppyjUBkRPtsL+8w==}
+    engines: {node: ^16.0.0 || ^18.0.0 || >=20.0.0}
+    dev: false
 
   /napi-build-utils@1.0.2:
     resolution: {integrity: sha512-ONmRUqK7zj7DWX0D9ADe03wbwOBZxNAfF20PlGfCWQcD3+/MakShIHrMqx9YwPTfxDdF1zLeL+RGZiR9kGMLdg==}

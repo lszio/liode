@@ -1,3 +1,3 @@
-export default function arena() {
+export default function ReactArena() {
   return <div>Arena React</div>;
 }
