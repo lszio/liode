@@ -12,14 +12,14 @@ export default function User() {
   useEffect(() => {
     supabase.getSession().then(({ data: { session } }) => {
       $session.set(session);
-      $user.set(session.user);
+      $user.set(session?.user);
     });
 
     const {
       data: { subscription },
     } = supabase.client.auth.onAuthStateChange((_, session) => {
       $session.set(session);
-      $user.set(session.user);
+      $user.set(session?.user);
     });
 
     return () => subscription.unsubscribe();
