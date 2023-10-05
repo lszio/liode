@@ -1,0 +1,106 @@
+---
+import Header from "./header.astro"
+import { FaArtstation} from "react-icons/fa"
+
+export interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Astro description">
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>{title}</title>
+	</head>
+
+	<body>
+		<div class="container" data-container>
+			<div class="header foldable"><Header /></div>
+			<div class="menu foldable">Menu</div>
+			<div class="body"> <slot /> </div>
+			<div class="right foldable">Right</div>
+			<div class="footer foldable">Footer</div>
+		</div>
+
+		<div class="menu-toggler" data-menu-toggler>
+			<FaArtstation />
+		</div>
+	</body>
+</html>
+
+<script>
+import { $menuFolded } from "../store"
+const toggler = document.querySelector('[data-menu-toggler]')
+const container = document.querySelector('[data-container]')
+
+toggler?.addEventListener("click", () => {
+	$menuFolded.set(!$menuFolded.get())
+})
+
+$menuFolded.subscribe(folded => {
+	localStorage.setItem("menu-folded", folded ? "t" : "nil")
+	if(folded) {
+		container?.classList.add("menu-folded")
+	}else{
+		container?.classList.remove("menu-folded")
+	}
+})
+</script>
+
+<style is:global>
+:root {
+	--accent: 124, 58, 237;
+	--accent-gradient: linear-gradient(45deg, rgb(var(--accent)), #da62c4 30%, white 60%);
+}
+html {
+	font-family: system-ui, sans-serif;
+	background-color: #F6F6F6;
+}
+code {
+	font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
+		Bitstream Vera Sans Mono, Courier New, monospace;
+}
+
+[data-container] {
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+	grid-template-columns: auto 1fr auto;
+	grid-template-areas: 
+	'header header header'
+	'menu body right' 
+	'menu footer right' ;
+	gap: 10px;
+	min-height: 100vh;
+	min-width: 100vw;
+}
+
+.header {grid-area: header;}
+.body {
+	grid-area:body; 
+	background-color: white;
+}
+.menu {grid-area: menu;}
+.right {grid-area:right;}
+.footer {grid-area:footer;}
+
+.menu-toggler {
+	position: absolute;
+	left: 6px;
+	top: 6px;
+}
+
+.menu-toggler:hover {
+	transform: scale(1.2, 1.2);
+}
+
+.menu-folded > .foldable {
+	display: none;
+}
+</style>
