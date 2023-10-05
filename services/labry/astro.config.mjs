@@ -16,4 +16,9 @@ export default defineConfig({
   adapter: vercel({
     functionPerRoute: false
   }),
+  vite: {
+    ssr: {
+      noExternal: ["react-icons"]
+    }
+  }
 });
