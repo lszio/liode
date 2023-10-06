@@ -1,6 +1,6 @@
 ---
-import { CollectionEntry, getCollection } from 'astro:content';
-import BlogPost from '../../layouts/BlogPost.astro';
+import { type CollectionEntry, getCollection } from 'astro:content';
+import Layout from '../../layouts/blog.astro';
 
 export const prerender = true
 
@@ -17,7 +17,7 @@ const post = Astro.props;
 const { Content } = await post.render();
 ---
 
-<BlogPost {...post.data}>
+<Layout {...post.data}>
 	<h1>{post.data.title}</h1>
 	<Content />
-</BlogPost>
+</Layout>

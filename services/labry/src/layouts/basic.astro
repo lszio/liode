@@ -1,5 +1,6 @@
 ---
 import Header from "./header.astro"
+import Footer from "./footer.astro";
 import { FaArtstation } from "react-icons/fa"
 
 export interface Props {
@@ -21,13 +22,11 @@ const { title } = Astro.props;
 	</head>
 
 	<body>
-		<div class="container" data-container>
-			<div class="header foldable"><Header /></div>
-			<div class="menu foldable">Menu</div>
-			<div class="body"> <slot /> </div>
-			<div class="right foldable">Right</div>
-			<div class="footer foldable">Footer</div>
-		</div>
+		<header class="header foldable"><Header /></header>
+		<aside class="menu foldable">Menu</aside>
+		<main class="body"> <slot /> </main>
+		<aside class="right foldable">Right</aside>
+		<Footer class="footer foldable" />
 
 		<div class="menu-toggler" data-menu-toggler>
 			<FaArtstation />
@@ -38,7 +37,7 @@ const { title } = Astro.props;
 <script>
 import { $menuFolded } from "../store"
 const toggler = document.querySelector('[data-menu-toggler]')
-const container = document.querySelector('[data-container]')
+const container = document.body
 
 toggler?.addEventListener("click", () => {
 	$menuFolded.set(!$menuFolded.get())
@@ -68,7 +67,7 @@ code {
 		Bitstream Vera Sans Mono, Courier New, monospace;
 }
 
-[data-container] {
+body {
 	display: grid;
 	grid-template-rows: auto 1fr auto;
 	grid-template-columns: auto 1fr auto;
