@@ -1,0 +1,16 @@
+---
+const {class: className} = Astro.props
+---
+
+<aside class:list={[
+    "",
+    className
+]}>
+    aside
+</aside>
+
+<style lang="stylus">
+aside {
+    min-width: 200px;
+}
+</style>

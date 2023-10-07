@@ -1,6 +1,7 @@
 ---
 import Header from "./header.astro"
 import Footer from "./footer.astro";
+import Aside from "./aside.astro"
 import { FaArtstation } from "react-icons/fa"
 
 export interface Props {
@@ -22,36 +23,68 @@ const { title } = Astro.props;
 	</head>
 
 	<body>
-		<Header class="header foldable"></Header>
-		<aside class="menu foldable">Menu</aside>
-		<main class="body"> <slot /> </main>
-		<aside class="right foldable">Right</aside>
-		<Footer class:list={["footer" , "foldable"]} />
+		<Header /> 
+		<main> <slot /> </main>
+		<Aside />
+		<Footer />
 
-		<div class="menu-toggler" data-menu-toggler>
+		<div class="mode-toggler" data-mode-toggler>
 			<FaArtstation />
 		</div>
 	</body>
 </html>
 
 <script>
-import { $menuFolded } from "../store"
-const toggler = document.querySelector('[data-menu-toggler]')
+import { $inImmersionMode } from "../store"
+const toggler = document.querySelector('[data-mode-toggler]')
 const container = document.body
 
 toggler?.addEventListener("click", () => {
-	$menuFolded.set(!$menuFolded.get())
+	$inImmersionMode.set(!$inImmersionMode.get())
 })
 
-$menuFolded.subscribe(folded => {
-	localStorage.setItem("menu-folded", folded ? "t" : "nil")
-	if(folded) {
-		container?.classList.add("menu-folded")
+$inImmersionMode.subscribe(state => {
+	localStorage.setItem("immersionModep", state ? "t" : "nil");
+	if(state) {
+		container?.classList.add("immersion-mode")
 	}else{
-		container?.classList.remove("menu-folded")
+		container?.classList.remove("immersion-mode")
 	}
 })
 </script>
+
+<style lang="stylus" is:global>
+body {
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+	grid-template-columns: minmax(0px, 1fr) 10fr auto minmax(0px, 1fr);
+	min-height: 100vh;
+	min-width: 100vw;
+}
+
+header, footer {
+	grid-column:1 / span 4;
+}
+main {
+	grid-column: 2 /span 1;
+}
+
+.immersion-mode {
+	header, footer, aside {
+		display: none;
+	}
+}
+
+.mode-toggler {
+	position: absolute;
+	left: 6px;
+	top: 6px;
+
+	&:hover {
+		transform: scale(1.2, 1.2);
+	}
+}
+</style>
 
 <style is:global>
 :root {
@@ -63,21 +96,7 @@ html {
 	background-color: #F6F6F6;
 }
 code {
-	font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
-		Bitstream Vera Sans Mono, Courier New, monospace;
-}
-
-body {
-	display: grid;
-	grid-template-rows: auto 1fr auto;
-	grid-template-columns: auto 1fr auto;
-	grid-template-areas: 
-	'header header header'
-	'menu body right' 
-	'menu footer right' ;
-	gap: 10px;
-	min-height: 100vh;
-	min-width: 100vw;
+	font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
 }
 
 /* Hide ScrollBar */
@@ -89,29 +108,5 @@ body::-webkit-scrollbar {
 body {
 	-ms-overflow-style: none; /* IE & Edge*/
 	scrollbar-width: none; /* Firefox */
-}
-
-header {grid-area: header;}
-main {
-	grid-area:body; 
-	/* background-color: white; */
-	padding: 0 50px;
-}
-.menu {grid-area: menu;}
-.right {grid-area: right;}
-footer {grid-area:footer;}
-
-.menu-toggler {
-	position: absolute;
-	left: 6px;
-	top: 6px;
-}
-
-.menu-toggler:hover {
-	transform: scale(1.2, 1.2);
-}
-
-.menu-folded > .foldable {
-	display: none;
 }
 </style>
