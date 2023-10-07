@@ -1,0 +1,32 @@
+--- 
+import Layout from "../../layouts/basic.astro";
+import { kebabCase } from "lodash";
+
+import SimpleVue from "../../vue/simple.vue";
+import RcSelect from "../../react/arena/rc-select"
+import SvgMisc from "../../react/arena/svg-misc"
+
+export const prerender = true;
+
+export const Arenas = {
+    SimpleVue,
+    SvgMisc,
+    RcSelect
+}
+
+export async function getStaticPaths () {
+    return Object.keys(Arenas).map(k => {
+        return {
+            params: { name: kebabCase(k) }
+        }
+    })
+}
+
+const { name } = Astro.params;
+---
+
+<Layout title={name!}>
+    { name === "simple-vue" && <SimpleVue client:load /> }
+    { name === "rc-select" && <RcSelect client:load /> }
+    { name === "svg-misc" && <SvgMisc client:load /> } 
+</Layout>
