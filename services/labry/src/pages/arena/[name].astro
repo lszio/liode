@@ -1,6 +1,5 @@
 --- 
 import Layout from "../../layouts/basic.astro";
-import { kebabCase } from "lodash";
 
 import SimpleVue from "../../vue/simple.vue";
 import RcSelect from "../../react/arena/rc-select"
@@ -14,10 +13,14 @@ export const Arenas = {
     RcSelect
 }
 
+export function toKebabCase(str: string): string {
+  return str.replace(/[A-Z]/g, (match, index) => (index !== 0 ? "-" : "") + match.toLowerCase());
+}
+
 export async function getStaticPaths () {
     return Object.keys(Arenas).map(k => {
         return {
-            params: { name: kebabCase(k) }
+            params: { name: toKebabCase(k) }
         }
     })
 }

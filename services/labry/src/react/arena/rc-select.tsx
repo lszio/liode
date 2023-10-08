@@ -14,7 +14,7 @@ export function RcSelectIconOption() {
       })}
       value={value}
     >
-      <Option value="asdfg">sdg</Option>
+      {/* <Option value="asdfg">sdg</Option> */}
     </Select>
   );
 }
@@ -44,7 +44,7 @@ export default function RcSelectArena() {
   return (
     <div>
       <CustomDropdown />
-      <RcSelectIconOption />
+      {/* <RcSelectIconOption /> */}
     </div>
   );
 }
