@@ -328,10 +328,10 @@ importers:
         specifier: ^4.11.0
         version: 4.11.0(react@18.2.0)
       sprotty:
-        specifier: ^0.13.0
+        specifier: 0.13.0
         version: 0.13.0
       sprotty-protocol:
-        specifier: ^0.13.0
+        specifier: 0.13.0
         version: 0.13.0
       stylus:
         specifier: ^0.60.0
