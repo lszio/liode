@@ -1,0 +1,221 @@
+:PROPERTIES:
+:ID:       org-mode
+:END:
+#+title: Org Mode Demo
+#+startup: content
+#+SUMMARY: Test
+#+author: Liszt21
+
+* OrgMode 基础语法
+:PROPERTIES:
+:ID:       b412861e-dbcc-446d-8d43-eee8f8604628
+:END:
+** 标题
+#+begin_example
+# * 一级
+# ** 二级
+#+end_example
+
+** 强调
+*加粗* /倾斜/ _下划线_ ~代码~ +中划线+ =verbatim=
+
+#+begin_example
+*加粗* /倾斜/ _下划线_ ~代码~ +中划线+ =verbatim=
+
+/One may expect this whole sentence to be italicized, but the
+following ~user/?variable~ contains =/= character, which effectively
+stops emphasis there./
+#+end_example
+
+** 上下标
+The radius of the sun is R_sun = 6.96 x 10^8 m.  On the other hand,
+the radius of Alpha Centauri is R_{Alpha Centauri} = 1.28 x R_{sun}.
+
+#+begin_example
+The radius of the sun is R_sun = 6.96 x 10^8 m.  On the other hand,
+the radius of Alpha Centauri is R_{Alpha Centauri} = 1.28 x R_{sun}.
+#+end_example
+
+*** 快捷键
+C-c C-x \ (org-toggle-pretty-entities)
+
+** 特殊字符
+#+begin_example
+Pro tip: Given a circle \Gamma of diameter d, the length of its
+circumference is \pi{}d.
+#+end_example
+*** 快捷键
+C-c C-x \ (org-toggle-pretty-entities)
+
+** LaTeX
+#+begin_example
+\begin{equation}                        % arbitrary environments,
+x=\sqrt{b}                              % even tables, figures
+\end{equation}                          % etc
+
+If $a^2=b$ and \( b=2 \), then the solution must be
+either $$ a=+\sqrt{2} $$ or \[ a=-\sqrt{2} \].
+#+end_example
+*** 快捷键
+C-c C-x C-l (org-latex-preview)
+
+*** 配置
+#+begin_example
+#+OPTIONS: tex:t’	Do the right thing automatically (MathJax)
+#+OPTIONS: tex:nil’	Do not process LaTeX fragments at all
+#+OPTIONS: tex:verbatim’	Verbatim export, for jsMath or so
+#+STARTUP: latexpreview’
+#+STARTUP: nolatexpreview’
+#+end_example
+
+** 图片
+#+begin_example
+#+CAPTION: This is the caption for the next figure link (or table)
+#+NAME:   fig:SED-HR4049
+[[./img/a.jpg]]
+#+end_example
+*** 快捷键
+C-c C-x C-v (org-toggle-inline-images)
+
+** 水平线
+#+begin_example
+-----
+#+end_example
+** 脚注
+#+begin_example
+The Org homepage[fn:1] now looks a lot better than it used to.
+...
+[fn:1] The link is: https://orgmode.org
+#+end_example
+*** 快捷键
+C-c C-x f The footnote action command.
+
+When this command is called with a prefix argument, a menu of additional options is offered:
+
+s	Sort the footnote definitions by reference sequence.
+r	Renumber the simple ‘fn:N’ footnotes.
+S	Short for first r, then s action.
+n	Rename all footnotes into a ‘fn:1’ … ‘fn:n’ sequence.
+d	Delete the footnote at point, including definition and references.
+
+C-c C-c
+If point is on a footnote reference, jump to the definition. If it is at the definition, jump back to the reference. When called at a footnote location with a prefix argument, offer the same menu as C-c C-x f.
+
+C-c C-o or mouse-1/2
+Footnote labels are also links to the corresponding definition or reference, and you can use the usual commands to follow these links.
+
+* OrgMode 绘图
+:PROPERTIES:
+:ID:       a613770b-4da7-4cf9-8e94-2157dbcc9d08
+:END:
+** Ditaa
+#+begin_src ditaa :file "../assets/org-mode-draw-ditaa.png"
+
+#+end_src
+** Dot
+#+begin_src dot :file "../assets/org-mode-draw-dot.png" :cmdline -Kdot -Tpng
+digraph G {
+  size="8,6"
+  ratio=expand
+  edge [dir=both]
+  plcnet [shape=box, label="PLC Network"]
+  subgraph cluster_wrapline {
+    label="Wrapline Control System"
+    color=purple
+    subgraph {
+    rank=same
+    exec
+    sharedmem [style=filled, fillcolor=lightgrey, shape=box]
+    }
+    edge[style=dotted, dir=none]
+    exec -> opserver
+    exec -> db
+    plc -> exec
+    edge [style=line, dir=both]
+    exec -> sharedmem
+    sharedmem -> db
+    plc -> sharedmem
+    sharedmem -> opserver
+  }
+  plcnet -> plc [constraint=false]
+  millwide [shape=box, label="Millwide System"]
+  db -> millwide
+
+  subgraph cluster_opclients {
+    color=blue
+    label="Operator Clients"
+    rankdir=LR
+    labelloc=b
+    node[label=client]
+    opserver -> client1
+    opserver -> client2
+    opserver -> client3
+  }
+}
+#+end_src
+
+#+RESULTS:
+[[file:../assets/org-mode-draw-dot.png]]
+
+** [[id:plantuml][Plantuml]]
+#+begin_src plantuml :file "../assets/org-mode-draw-plantuml.png"
+title Example Sequence Diagram
+activate Client
+Client -> Server: Session Initiation
+note right: Client requests new session
+activate Server
+Client <-- Server: Authorization Request
+note left: Server requires authentication
+Client -> Server: Authorization Response
+note right: Client provides authentication details
+Server --> Client: Session Token
+note left: Session established
+deactivate Server
+Client -> Client: Saves token
+deactivate Client
+#+end_src
+
+#+RESULTS:
+[[file:../assets/org-mode-draw-plantuml.png]]
+** SageMath
+#+begin_src sage
+p = circle((2,2),1)
+p.show()
+#+end_src
+** Tizk
+#+begin_src latex
+\documentclass{standalone}
+
+\usepackage{tikz}
+
+\begin{document}
+
+\footnotesize
+\begin{tikzpicture}
+  \def\a{.5}
+  \draw [help lines,step={\a}] ({-5.75*\a},{-5.75*\a}) grid ({5.75*\a},{5.75*\a});
+  \draw [thick,<->] ({-6*\a},0) -- ({6*\a},0) node [right] {x};
+  \draw [thick,<->] (0,{-6*\a}) -- (0,{6*\a}) node [above] {y};
+  \draw (0,0) circle ({4.5*\a});
+  \draw ({-5*\a},{-5*\a}) -- ({5*\a},{5*\a});
+  \foreach \x in {-5,-4,-3,-2,-1,1,2,3,4,5} {
+    \node at ({\x*\a},0) [below] {\x};
+    \node at (0,{\x*\a}) [left] {\x};}
+  \node at (0,0) [below right] {0};
+\end{tikzpicture}
+
+\end{document}
+#+end_src
+* OrgMode 表格
+| A      | B | C |
+|--------+---+---|
+| 一      | 二 | 三 |
+| *asdf* |   |   |
+
+* OrgMode 相关链接
+- [[https://orgmode.org/manual/index.html#SEC_Contents][Manual]] [fn:1]
+
+* Footnotes
+
+[fn:1] the link is https://orgmode.org
+
