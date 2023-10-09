@@ -1,28 +1,30 @@
-(ns crx.cs)
+(ns ^:dev/once crx.cs
+  (:require [promesa.core :as p]))
 
 (defonce wedex? (not (nil? (js/document.getElementById "wedex"))))
+(defonce chrome? (not (nil? js/chrome)))
 
-(defn send-to-worker [m c] (js/chrome.runtime.sendMessage m c))
+(def brx-id "")
+(def tab-info {})
 
-(defn on-runtime-message [m s r]
-  (js/console.log m s r)
-  (r "response"))
+(defn set-tab-info [t]
+  (set! tab-info t))
 
-(defn update-bookmarks []
-  (js/chrome.runtime.sendMessage
-   #js {:type "update-bookmarks"}
-   (fn [res] (js/window.postMessage #js {:type "update-bookmarks" :payload res} "*"))))
+(defn get-tab-info []
+  (p/-> (js/chrome.runtime.sendMessage #js {:type "request-tab-info"})
+        (js->clj :keywordize-keys true)
+        set-tab-info))
 
-(defn on-window-message [e]
-  (let [source (.-source e)
-        data (.-data e)
-        type (.-type data)] 
-    (case type
-      "request-bookmarks" (update-bookmarks)
-      "unknown")))
+(defn send-extension-id-to-webpage []
+  (js/document.body.dispatchEvent 
+   (js/CustomEvent. 
+    "wedex" 
+    (clj->js {:detail {:brxId js/chrome.runtime.id 
+                       :kind :ping 
+                       :tabId (:id tab-info)
+                       :tab tab-info}}))))
 
 (defn init []
-  (js/console.log "inject wedex content script")
-  (when wedex?
-    (update-bookmarks)
-    (js/window.addEventListener "message" on-window-message)))
+  (js/console.log "[WEDEX CONTENT SCRIPT]: init")
+  (get-tab-info) 
+  (send-extension-id-to-webpage))

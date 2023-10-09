@@ -1,0 +1,16 @@
+---
+const today = new Date();
+const {class: className} = Astro.props
+---
+
+<footer class:list={[className]}>
+	&copy; {today.getFullYear()} FERLD. All rights reserved.
+</footer>
+
+<style>
+	footer {
+		padding: 25px;
+		text-align: center;
+		border-top: 1px solid black;
+	}
+</style>

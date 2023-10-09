@@ -1,0 +1,21 @@
+---
+import HeaderLink from "../components/HeaderLink.astro";
+
+const {class: className} = Astro.props
+---
+
+<header class:list={[
+    "w-full flex flex-row text-center h-10 border-b-2 border-black",
+    className
+]}>
+    <nav class="flex-grow flex flex-row justify-around">
+        <HeaderLink href="/">HOME</HeaderLink>
+        <HeaderLink href="/code">CODE</HeaderLink>
+        <HeaderLink href="/blog">BLOG</HeaderLink>
+        <HeaderLink href="/tool">TOOL</HeaderLink>
+    </nav>
+
+    <div class="flex-grow flex-shrink"></div>
+
+    <HeaderLink href="/user">USER</HeaderLink>
+</header>

@@ -1,0 +1,38 @@
+---
+import Layout from "../../layouts/basic.astro";
+import { getCollection } from "astro:content";
+import { COLLECTIONS } from "../../consts";
+
+export const prerender =  true
+
+type Types = typeof COLLECTIONS[number]
+
+interface Path {
+    params: {
+        collection: Types
+    }
+}
+
+export function getStaticPaths(): Path[] {
+    return COLLECTIONS.map(collection => ({ params: {collection} }))
+}
+
+const { collection } = Astro.params
+
+const list = await getCollection(collection )
+---
+
+<Layout title="title">
+    {collection }
+	<section>
+		<ul>
+			{
+				list.map((item) => (
+					<li>
+						<a href={`/${item.collection}/${item.slug}/`}>{item.data.title}</a>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+</Layout>

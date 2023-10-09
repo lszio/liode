@@ -7,9 +7,9 @@
     "build": "run-s *:build",
     "compile": "run-s *:compile",
     "repl": "shadow-cljs browser-repl",
-    "cljs:watch": "shadow-cljs watch app",
-    "cljs:build": "shadow-cljs compile app",
-    "cljs:compile": "shadow-cljs release app",
+    "app:watch": "shadow-cljs watch app",
+    "app:build": "shadow-cljs compile app",
+    "app:compile": "shadow-cljs release app",
     "css:build": "cross-env postcss src/css/tailwind.css -o ./public/css/style.css --verbose",
     "css:watch": "cross-env postcss src/css/tailwind.css -o ./public/css/style.css --verbose -w",
     "css:compile": "cross-env postcss NODE_ENV=production src/css/tailwind.css -o ./public/css/style.css --verbose"

@@ -3,9 +3,14 @@
                 "src/main"
                 "src/test"]
 
- :dependencies [[reagent "1.2.0"]]
+ :dependencies [[reagent "1.2.0"]
+                [datascript "1.5.3"]
+                [funcool/promesa "11.0.678"]
+                [metosin/malli "0.12.0"]]
 
  :dev-http {7991 "public"}
+
+ :compiler-options {:externs ["datascript/externs.js"]}
 
  :closure-defines {api.supabase/SUPABASE_URL #shadow/env "PUBLIC_SUPABASE_URL"
                    api.supabase/SUPABASE_ANON_KEY #shadow/env "PUBLIC_SUPABASE_ANON_KEY"}
@@ -15,17 +20,13 @@
 
  :js-options {:js-package-dirs ["node_modules", "../../node_modules"]}
 
- :builds {:crx {:target :browser
-                :output-dir "public/js"
-                :asset-path "/js"
-                :runtime "custom"
-
-                :modules {:cs {:init-fn crx.cs/init}}}
-
-          :app {:target :esm
-                :output-dir "public/js"
+ :builds {:app {:target :esm
+                :output-dir "public/cljs"
+                :devtools {:use-document-host false
+                           :preloads []}
 
                 :modules {:shared {:entries []}
                           :core {:init-fn core/init :depends-on #{:shared}}
+                          :cs {:init-fn crx.cs/init :depends-on #{:shared}}
                           :sp {:init-fn crx.sp/init :depends-on #{:shared}}
                           :sw {:init-fn crx.sw/init :depends-on #{:shared}}}}}}

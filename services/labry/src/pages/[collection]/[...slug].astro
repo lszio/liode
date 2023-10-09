@@ -1,0 +1,38 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import Layout from "../../layouts/basic.astro"
+import { COLLECTIONS } from "../../consts";
+
+export const prerender =  true
+
+type Type = typeof COLLECTIONS[number]
+
+interface Path {
+    params: {
+        collection: Type,
+        slug: string
+    },
+    props: CollectionEntry<Type>
+}
+
+export async function getStaticPaths() {
+    const paths: Path[] = []
+    for(const collection of COLLECTIONS) {
+        const list = await getCollection(collection)
+        paths.splice(0, 0, ...list.map(item => ({params: {collection, slug: item.slug, }, props: item})))
+    }
+
+    return paths;
+}
+
+const { collection } = Astro.params as Path["params"]
+
+type Props = CollectionEntry<typeof collection >
+
+const post = Astro.props
+const { Content } = await post.render();
+---
+
+<Layout {...post.data}>
+    <Content />
+</Layout>
