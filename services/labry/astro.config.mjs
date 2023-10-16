@@ -11,7 +11,7 @@ import vercel from "@astrojs/vercel/serverless"
 
 export default defineConfig({
   site: "https://labry.vercel.app",
-  integrations: [mdx(), org({}), vue(), react(), tailwind(), sitemap()],
+  integrations: [mdx(), org({}), vue(), react({}), tailwind(), sitemap()],
   output: "server",
   adapter: vercel({
     functionPerRoute: false
@@ -19,6 +19,6 @@ export default defineConfig({
   vite: {
     ssr: {
       noExternal: ["react-icons",]
-    }
+    },
   }
 });
