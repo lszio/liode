@@ -14,7 +14,8 @@ function defaultPromot() {
 export default function SubmissionCheck() {
   const [users, setUsers] = useState<string[]>([]);
   const [stack, setStack] = useState<StackItem[]>([]);
-  const [promot, setPromot] = useState(defaultPromot());
+  const [todo,setTodo] = useState(defaultPromot());
+  const [done, setDone] = useState("")
   const [current, setCurrent] = useState<number>(-1);
   const [submitted, setSubmitted] = useState<string[]>([]);
 
@@ -40,9 +41,9 @@ export default function SubmissionCheck() {
   useEffect(() => {
     setStack([]);
     setCurrent(-1);
-    setSubmitted([]);
-    setUsers(Array.from(new Set(promot.split(/[.,;\n]/).filter((n) => n))));
-  }, [promot]);
+    setSubmitted(done.split("\n").filter(n => users.includes(n)));
+    setUsers(Array.from(new Set(todo.split(/[.,;\n]/).filter((n) => n))));
+  }, [todo, done]);
 
   const toggle = (name: string, record = true) => {
     if (submitted.includes(name)) {
@@ -66,10 +67,21 @@ export default function SubmissionCheck() {
           minHeight: "3rem",
           resize: "vertical",
         }}
-        value={promot}
+        value={todo}
         onChange={(e) => {
-          setPromot(e.target.value);
+          setTodo(e.target.value);
           localStorage.setItem("submission-check-promot", e.target.value);
+        }}
+      />
+      <textarea
+        style={{
+          width: "100%",
+          minHeight: "3rem",
+          resize: "vertical"
+        }}
+        value={done}
+        onChange={e => {
+          setDone(e.target.value);
         }}
       />
 
