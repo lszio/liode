@@ -1,7 +1,8 @@
 ---
-// import 
+import App from "./view"
+import { fromSearchParams } from "./utils";
+
+const params = fromSearchParams(Astro.url.searchParams) as any
 ---
 
-<div>GAL
-    <div>{Astro.url.pathname}</div>
-</div>
+<App params={params} client:only="react" />

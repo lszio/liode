@@ -1,61 +1,32 @@
 import { z } from "zod";
-import { curry } from "@ferld/likit";
 import { Database, Item } from "./protocol";
 
-export const CreateItemAction = z.object({
-  type: z.literal("createItem"),
+export const CreateSourcePayload = z.object({
+  source: z.string(),
+  path: z.string(),
+});
+
+export const CreateGroupPayload = CreateSourcePayload.omit({
+  path: true,
+}).extend({
   source: z.string(),
   group: z.string(),
+  items: z.array(Item).optional(),
+});
+
+export const CreateItemPayload = CreateGroupPayload.omit({
+  items: true,
+}).extend({
   name: z.string(),
-  payload: Item.deepPartial(),
+  with: z.array(z.string()),
+  detail: z.record(z.string(), z.any()),
 });
 
-export type CreateItemAction = z.infer<typeof CreateItemAction>;
+export const CreatePayload =
+  CreateSourcePayload.or(CreateGroupPayload).or(CreateItemPayload);
 
-export const CreateGroupAction = z.object({
-  type: z.literal("createGroup"),
-  source: z.string(),
-  group: z.string(),
-  payload: z.array(Item),
-});
+export type CreatePayload = z.infer<typeof CreatePayload>;
 
-export type CreateGroupAction = z.infer<typeof CreateGroupAction>;
-
-export const createGroup = curry(
-  (action: CreateGroupAction, db: Database): Database => {
-    const { source, group, payload } = action;
-    if (!db[source]) {
-      throw new Error(`no such source ${source}`);
-    } else if (db[source][group]) {
-      throw new Error(`already have group ${group}`);
-    }
-
-    db[source][group] = payload;
-
-    return {
-      [source]: db[source],
-    };
-  }
-);
-
-export const createItem = curry(
-  (action: CreateItemAction, db: Database): Database => {
-    const { source, group, name, payload } = action;
-
-    if (!db[source]) {
-      throw new Error(`no such source ${source}`);
-    } else if (!db[source][group]) {
-      throw new Error(`no such group ${group} in ${source}`);
-    } else if (db[source][group].find((item) => item[name] === name)) {
-      throw new Error(`already have item with name ${name}`);
-    }
-
-    db[source][group].push({ tags: [], ...payload, name });
-
-    return {
-      [source]: db[source],
-    };
-  }
-);
-
-export type Action = CreateItemAction | CreateGroupAction;
+export function create(db: Database, payload: CreatePayload) {
+  //
+}
