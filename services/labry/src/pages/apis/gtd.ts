@@ -3,7 +3,7 @@ import { homedir } from "os";
 import { readFileSync } from "fs";
 import { parse } from "yaml";
 import type { APIRoute } from "astro";
-import { readFileObject, writeFileObject } from "../../../utils/file";
+import { readFileObject, writeFileObject } from "../../utils/file";
 
 export interface Source {
   name: string;

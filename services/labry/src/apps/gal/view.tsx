@@ -1,9 +1,6 @@
-import { type Action } from "../pages/apis/tools/list/action";
 import { useMemo, useEffect, useState } from "react";
 import { css } from "@emotion/css";
 import styled from "@emotion/styled";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Link from "@mui/material/Link";
 
 const url = "/apis/tools/list";
 
@@ -59,7 +56,7 @@ export function SourceList(props: SourceListProps) {
                 url.searchParams.append("source", s);
               }
 
-              window.location.href = url;
+              window.location.href = url.pathname;
             }}
           >
             {s}

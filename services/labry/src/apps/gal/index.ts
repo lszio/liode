@@ -1,8 +1,6 @@
-import { Effect } from "effect";
 export * from "./action";
 import { homedir } from "os";
-import type { APIRoute } from "astro";
-import { readFileObject, writeFileObject } from "../../../../utils/file";
+import { readFileObject, writeFileObject } from "../../utils/file";
 import type { Database, Source } from "./protocol";
 
 const sources: Record<string, string | URL> = {
@@ -30,18 +28,9 @@ const save = (...sections: string[]) => {
   }
 };
 
-export const GET: APIRoute = ({ request, params, url }) => {
-  load();
-  return new Response(JSON.stringify(db));
-};
-
 interface Param {
   action: string;
   dryrun?: boolean;
   reload?: boolean;
   payload: Record<string, string>;
 }
-
-export const POST: APIRoute = (option) => {
-  return new Response(JSON.stringify("sadg"));
-};

@@ -58,4 +58,4 @@ export const createItem = curry(
   }
 );
 
-export type Action = CreateItemAction | CreateGroupAction
+export type Action = CreateItemAction | CreateGroupAction;
