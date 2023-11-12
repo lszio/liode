@@ -1,0 +1,24 @@
+---
+import ListApp, {ListAppProps} from "../../components/list"
+import Layout from "../../layouts/basic.astro"
+
+const getParams = (url: URL)=> Array.from(url.searchParams.entries()).reduce<ListAppProps["params"]>((pv, [key, value]) => {
+    if(key in pv) {
+        if(Array.isArray(pv[key] )) {
+            pv[key].push(value)
+        } else {
+            pv[key] = [pv[key], value]
+        }
+    }else{
+        pv[key] = value
+    }
+    return pv
+}, {} as any)
+
+const db = {}
+
+---
+
+<Layout title="list" >
+    <ListApp params={getParams(Astro.url)} client:only="react" />
+</Layout>
