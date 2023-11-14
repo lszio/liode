@@ -1,8 +1,7 @@
-import React from "react";
 import Game from "./index";
 
 export default {
-  title: "Geist/ReactionSpeed",
+  title: "GAMES/ReactionSpeed",
   component: Game,
 };
 
