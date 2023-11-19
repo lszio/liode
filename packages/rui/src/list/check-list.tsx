@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import autoAnimate from "@formkit/auto-animate";
 import styled from "@emotion/styled";
+import autoAnimate from "@formkit/auto-animate";
+import { ReactNode, useEffect, useRef, useState } from "react";
 
 export type Item =
   | string
@@ -16,6 +16,7 @@ export interface CheckListItemProps<T extends Item> {
   label: string;
   checked: boolean;
   onClick: () => void;
+  children: ReactNode[];
 }
 
 const Li = styled("li")``;
@@ -23,11 +24,12 @@ const Li = styled("li")``;
 export function CheckListItem<T extends Item>(props: CheckListItemProps<T>) {
   return (
     <Li
-      className={`check-list-item ${props.checked ? "checked" : "unchecked"}`}
       key={props.key}
       onClick={props.onClick}
+      data-testid="check-list-item"
+      className={`check-list-item ${props.checked ? "checked" : "unchecked"}`}
     >
-      {props.label}
+      {...props.children}
     </Li>
   );
 }
@@ -38,6 +40,7 @@ export interface CheckListProps<T extends Item> {
   getKey(item: T, idx?: number): string;
   getLabel(item: T): string;
   onToggle?(item: T, state?: boolean): void;
+  renderItem?(item: T): ReactNode;
 }
 
 function defaultKey<T extends Item>(item: T) {
@@ -68,10 +71,8 @@ const Ul = styled("ul")`
     margin: 0.2rem 0.2rem;
     border-radius: 0.5rem;
     background-color: #efefef;
-    // font-family: monospace;
 
     &:hover {
-      // transform: scale(1.2);
       background-color: #eee
     }
   }
@@ -83,6 +84,7 @@ export function CheckList<T extends Item>({
   onToggle,
   getKey = defaultKey<T>,
   getLabel = defaultLabel<T>,
+  renderItem = (i: T) => defaultLabel(i)
 }: CheckListProps<T>) {
   const [checkedItems, setCheckedItems] = useState<T[]>([]);
   const [uncheckedItems, setUnCheckedItems] = useState<T[]>([]);
@@ -110,15 +112,16 @@ export function CheckList<T extends Item>({
   }, [items, checked, getKey]);
 
   const toItem = (item: T, state: boolean): CheckListItemProps<T> => ({
-    checked: state,
     key: getKey(item),
     value: item,
     label: getLabel(item),
+    checked: state,
+    children: [renderItem(item)],
     onClick: () => doToggle(item),
   });
 
   return (
-    <Ul ref={parent}>
+    <Ul ref={parent} data-testid="check-list">
       {[
         checkedItems.map((i) => toItem(i, true)),
         uncheckedItems.map((i) => toItem(i, false)),
