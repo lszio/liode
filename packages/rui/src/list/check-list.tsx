@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import autoAnimate from "@formkit/auto-animate";
 import styled from "@emotion/styled";
 
-type Item =
+export type Item =
   | string
   | {
       key?: string;
@@ -17,9 +18,7 @@ export interface CheckListItemProps<T extends Item> {
   onClick: () => void;
 }
 
-const Li = styled("li")`
-
-`
+const Li = styled("li")``;
 
 export function CheckListItem<T extends Item>(props: CheckListItemProps<T>) {
   return (
@@ -72,20 +71,23 @@ const Ul = styled("ul")`
     // font-family: monospace;
 
     &:hover {
-      transform: scale(1.2);
+      // transform: scale(1.2);
+      background-color: #eee
     }
   }
 `;
 
 export function CheckList<T extends Item>({
   items,
-  checked,
+  checked = [],
   onToggle,
   getKey = defaultKey<T>,
   getLabel = defaultLabel<T>,
 }: CheckListProps<T>) {
   const [checkedItems, setCheckedItems] = useState<T[]>([]);
   const [uncheckedItems, setUnCheckedItems] = useState<T[]>([]);
+  const parent = useRef(null)
+
   const doToggle = onToggle
     ? onToggle
     : (item: T) => {
@@ -102,6 +104,7 @@ export function CheckList<T extends Item>({
       };
 
   useEffect(() => {
+    parent.current && autoAnimate(parent.current)
     setCheckedItems(items.filter((i) => checked.includes(getKey(i))));
     setUnCheckedItems(items.filter((i) => !checked.includes(getKey(i))));
   }, [items, checked, getKey]);
@@ -115,7 +118,7 @@ export function CheckList<T extends Item>({
   });
 
   return (
-    <Ul >
+    <Ul ref={parent}>
       {[
         checkedItems.map((i) => toItem(i, true)),
         uncheckedItems.map((i) => toItem(i, false)),

@@ -185,6 +185,9 @@ importers:
       '@emotion/styled':
         specifier: ^11.11.0
         version: 11.11.0(@emotion/react@11.11.1)(@types/react@18.2.28)(react@18.2.0)
+      '@formkit/auto-animate':
+        specifier: ^0.8.1
+        version: 0.8.1
       '@vanilla-extract/css':
         specifier: ^1.14.0
         version: 1.14.0
@@ -342,6 +345,9 @@ importers:
       '@ferld/likit':
         specifier: workspace:^
         version: link:../../packages/likit
+      '@ferld/rui':
+        specifier: workspace:^
+        version: link:../../packages/rui
       '@fontsource/roboto':
         specifier: ^5.0.8
         version: 5.0.8
@@ -4315,6 +4321,10 @@ packages:
 
   /@fontsource/roboto@5.0.8:
     resolution: {integrity: sha512-XxPltXs5R31D6UZeLIV1td3wTXU3jzd3f2DLsXI8tytMGBkIsGcc9sIyiupRtA8y73HAhuSCeweOoBqf6DbWCA==}
+    dev: false
+
+  /@formkit/auto-animate@0.8.1:
+    resolution: {integrity: sha512-0/Z2cuNXWVVIG/l0SpcHAWFhGdvLJ8DRvEfRWvmojtmRWfEy+LWNwgDazbZqY0qQYtkHcoEK3jBLkhiZaB/4Ig==}
     dev: false
 
   /@humanwhocodes/config-array@0.11.10:
