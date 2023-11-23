@@ -13,6 +13,15 @@ export default defineConfig({
       formats: ["es"],
       fileName: "index",
     },
+    rollupOptions: {
+      external: ["react", "react-dom"],
+      output: {
+        globals: {
+          react: "React",
+          "react-dom": "ReactDom"
+        }
+      }
+    }
   },
   plugins: [
     react(),

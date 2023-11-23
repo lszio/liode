@@ -1,2 +1,3 @@
 export default {};
-export * from "./games/reaction-speed/index";
+export * from "./games";
+export * from "./list"

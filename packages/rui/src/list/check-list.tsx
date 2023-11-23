@@ -1,12 +1,12 @@
 import styled from "@emotion/styled";
 import autoAnimate from "@formkit/auto-animate";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState, MouseEvent } from "react";
 
 export type Item =
 	| string
 	| {
 			key?: string;
-			label: string;
+			label?: string;
 			value: string;
     };
 
@@ -15,7 +15,7 @@ export interface CheckListItemProps<T extends Item> {
 	value: T;
 	label: string;
 	checked: boolean;
-	onClick: () => void;
+	onClick: (e: MouseEvent) => void;
 	children: ReactNode[];
 }
 
@@ -36,9 +36,9 @@ export function CheckListItem<T extends Item>(props: CheckListItemProps<T>) {
 
 export interface CheckListProps<T extends Item> {
 	items: T[];
-	checked: string[];
-	getKey(item: T, idx?: number): string;
-	getLabel(item: T): string;
+	checked?: string[];
+	getKey?(item: T, idx?: number): string;
+	getLabel?(item: T): string;
 	onToggle?(item: T, state?: boolean): void;
 	renderItem?(item: T): ReactNode;
 }
@@ -80,7 +80,7 @@ const Ul = styled("ul")`
 
 export function CheckList<T extends Item>({
 	items,
-	checked = [],
+	checked,
 	onToggle,
 	getKey = defaultKey<T>,
 	getLabel = defaultLabel<T>,
@@ -107,8 +107,8 @@ export function CheckList<T extends Item>({
 
 	useEffect(() => {
 		parent.current && autoAnimate(parent.current);
-		setCheckedItems(items.filter((i) => checked.includes(getKey(i))));
-		setUnCheckedItems(items.filter((i) => !checked.includes(getKey(i))));
+		setCheckedItems(items.filter((i) => checked?.includes(getKey(i))));
+		setUnCheckedItems(items.filter((i) => !checked?.includes(getKey(i))));
 	}, [items, checked, getKey]);
 
 	const toItem = (item: T, state: boolean): CheckListItemProps<T> => ({
@@ -117,7 +117,11 @@ export function CheckList<T extends Item>({
 		label: getLabel(item),
 		checked: state,
 		children: [renderItem(item)],
-		onClick: () => doToggle(item),
+    onClick: (e: MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      doToggle(item);
+    },
 	});
 
 	return (
