@@ -14,7 +14,7 @@ export default defineConfig({
       fileName: "index",
     },
     rollupOptions: {
-      external: ["react", "react-dom"],
+      external: ["react", "react-dom", "@emotion/styled", "@emotion/css", "@emotion/react"],
       output: {
         globals: {
           react: "React",
