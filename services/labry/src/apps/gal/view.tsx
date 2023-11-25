@@ -1,29 +1,9 @@
 import { useEffect, useState } from "react";
 import { css } from "@emotion/css";
-import styled from "@emotion/styled";
-import type { FlatItem, SourceItem } from "./protocol";
-import type { Params } from "./utils";
+import type { FlatItem, Item, SourceItem } from "./protocol";
+import { CheckList } from "@ferld/rui";
 
 const url = "/apis/gal";
-
-// export interface SourceItemProps {
-//   name: string;
-// }
-
-// export function SourceItem(props: SourceItemProps) {
-//   return <div>Source: {props.name}</div>;
-// }
-
-export interface SourceListProps {
-  sources: FlatItem<SourceItem>[];
-  params: Params;
-}
-
-const StyledSourceItem = styled("div")`
-  &.toggled {
-    color: red;
-  }
-`;
 
 export interface ListAppProps {
   params: {
@@ -40,81 +20,97 @@ const style = css`
 export function Gal(props: ListAppProps) {
   const [sources, setSources] = useState<FlatItem<SourceItem>[]>([]);
   const [groups, setGroups] = useState<FlatItem[]>([]);
-  const [params, setParams] = useState<Params>({
-    source: [],
-    group: [],
+  const [items, setItems] = useState<FlatItem[]>([]);
+  const [toggled, setToggled] = useState<Record<string, any[]>>({
+    sources: [],
+    groups: [],
   });
 
-  const toggleSource = (source: string) => {
-    if (params.source?.includes(source))
-      setParams({
-        ...params,
-        source: params.source.filter((s) => s !== source),
+  useEffect(() => {
+    const fetchData = async () => {
+      const sourcesJson: FlatItem<SourceItem>[] = await (
+        await fetch(`${url}?refresh=true&source=meta&group=sources`)
+      ).json();
+      setSources(
+        sourcesJson.map((s) => ({ ...s, value: s.name, lable: s.name }))
+      );
+
+      const query = sources.map((s) => `source=${s.name}`).join("&");
+      const groupsJson: FlatItem[] = await (
+        await fetch(`${url}?source=@groups&${query}`)
+      ).json();
+      setGroups(
+        groupsJson.map((g) => ({ ...g, value: g.name, label: g.name }))
+      );
+
+      const {source = [], group = []} = props.params;
+
+      setToggled({
+        ...toggled,
+        ...{
+          sources: source.length === 0 ? sources.map((i) => i.value) : [],
+          groups: group.length === 0 ? groups.map((i) => i.value) : [],
+        },
       });
-    else
-      setParams({
-        ...params,
-        source: [...params.source, source],
-      });
+    };
+
+    fetchData();
+  }, [props.params]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const query = [
+        ...toggled.groups.map((g) => `group=${g}`),
+        ...toggled.sources.map((s) => `source=${s}`),
+      ].join("&");
+      const response = await fetch(`${url}?${query}`);
+      setItems(await response.json());
+    };
+
+    fetchData();
+  }, [sources, groups, toggled]);
+
+  const doToggle = (type: "groups" | "sources") => (item: any) => {
+    const checked = toggled[type];
+    const index = checked.findIndex((i) => i === item.value);
+    if (index === -1) {
+      checked.push(item.value);
+    } else {
+      checked.splice(index, 1);
+    }
+
+    setToggled({
+      ...toggled,
+      [type]: [...checked],
+    });
   };
 
-  // const toggleParams = (section: string, value: string) => {
-  //   const ps = params[section];
-  //   const index = ps.indexOf(value);
-  //   if (index !== -1) {
-  //     ps.splice(index, 1);
-  //   } else {
-  //     ps.push(value);
-  //   }
-  //   setParams({
-  //     ...params,
-  //     [section]: ps,
-  //   });
-  // };
-
-  useEffect(() => {
-    fetch(url + "?refresh=true&source=meta&group=sources").then((res) => {
-      res.json().then((items: FlatItem<SourceItem>[]) => {
-        setSources(items);
-      });
-    });
-  }, []);
-
-  useEffect(() => {
-    fetch(url + "?refresh=true&source=@groups&group=local&group=sync").then(
-      (res) => {
-        res.json().then((items: FlatItem<SourceItem>[]) => {
-          console.log(items);
-          setGroups(items);
-        });
-      }
-    );
-  }, [sources]);
+  const toggleSource = doToggle("sources");
+  const toggleGroup = doToggle("groups");
 
   return (
     <div className={style}>
       <div>
-        {/* {sources.filter(s => params.source.includes(s.name)).map(s => {
-          return (<div>picked {s.name}</div>)
-        })} */}
-        {sources.map((s) => {
-          const source = props.params.source ?? [];
-          const picked = source.includes(s.name);
-
-          return (
-            <StyledSourceItem
-              className={"" + (picked ? "picked " : "")}
-              key={s.name}
-              onClick={() => {
-                console.log(picked, params);
-                toggleSource(s.name);
-                setSources(sources);
-              }}
-            >
+        <CheckList
+          items={sources}
+          checked={toggled.sources}
+          onToggle={toggleSource}
+          renderItem={(s: any) => (
+            <div>
               {s.name}
-            </StyledSourceItem>
-          );
-        })}
+              <CheckList
+                items={groups.filter((g) => g.group === s.name)}
+                checked={toggled.groups}
+                onToggle={toggleGroup}
+              />
+            </div>
+          )}
+        />
+      </div>
+      <div>
+        {items.map((item) => (
+          <div key={item.name}>{item.name}</div>
+        ))}
       </div>
     </div>
   );

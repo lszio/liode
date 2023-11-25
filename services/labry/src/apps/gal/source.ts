@@ -7,15 +7,15 @@ const database: Database = {
     sources: [
       {
         name: "local",
-        with: [],
-        detail: {
+        tags: [],
+        data: {
           path: new URL("../../../data/gal/local.yml", import.meta.url),
         },
       },
       {
         name: "sync",
-        with: [],
-        detail: {
+        tags: [],
+        data: {
           path: new URL(
             "file:///" + homedir() + "/Sync/Database/Labry/Gal/sync.yml"
           ),
@@ -37,8 +37,8 @@ const computeSources: ComputeSource[] = [
         for (const g of Object.keys(db[k])) {
           const item = {
             name: g,
-            with: [],
-            detail: {},
+            tags: [],
+            data: {},
           };
           if (groups[k]) {
             groups[k].push(item);
@@ -79,7 +79,7 @@ export const load = (...toLoad: string[]) => {
   const updates: Database = {};
   for (const {
     name,
-    detail: { path },
+    data: { path },
   } of sources) {
     updates[name] = readFileObject(path);
     console.log(`load ${name} from ${path}`);
@@ -94,7 +94,7 @@ export const save = (...toSave: string[]) => {
   const sources = database.meta?.sources.filter(filter) ?? [];
   for (const {
     name,
-    detail: { path },
+    data: { path },
   } of sources) {
     writeFileObject(database[name], path);
     console.log(`save ${name} to ${path}`);
@@ -117,35 +117,35 @@ export function filterWith(
     source?: string[];
     group?: string[];
     name?: string[];
-    // with?: string[];
   }
 ): Database {
-  console.log(option);
-  const { source, group, name } = option;
-  if (source && source.length !== 0) {
+  const { source = [], group = [], name = [] } = option;
+  if (source.length !== 0) {
     const filterd = Object.fromEntries(
-      Object.entries(db).filter(([k]) => option.source?.includes(k))
+      Object.entries(db).filter(([k]) => source.includes(k))
     );
-    console.log(`filter with source: ${option.source?.join(", ")}`);
+    console.log(`filter with source: ${source.join(", ")}`);
+
     delete option.source;
     return filterWith(filterd, option);
-  } else if (group && group.length !== 0) {
+  } else if (group.length !== 0) {
     for (const k of Object.keys(db)) {
       db[k] = Object.fromEntries(
-        Object.entries(db[k]).filter(([k]) => option.group?.includes(k))
+        Object.entries(db[k]).filter(([k]) => group.includes(k))
       );
     }
+    console.log(`filter with group: ${group.join(", ")}`);
 
-    console.log(`filter with group: ${option.source?.join(", ")}`);
     delete option.group;
     return filterWith(db, option);
-  } else if (name && name.length !== 0) {
+  } else if (name.length !== 0) {
     for (const s of Object.keys(db)) {
       for (const g of Object.keys(db[s])) {
-        db[s][g] = db[s][g].filter((i: Item) => option.name?.includes(i.name));
+        db[s][g] = db[s][g].filter((i: Item) => name.includes(i.name));
       }
     }
-    console.log(`filter with name: ${option.source?.join(", ")}`);
+    console.log(`filter with name: ${name.join(", ")}`);
+
     return db;
   }
 
@@ -157,7 +157,6 @@ export function flatDb(db: Database): FlatItem[] {
 
   for (const s of Object.keys(db)) {
     for (const g of Object.keys(db[s])) {
-      console.log(db[s][g]);
       for (const i of db[s][g]) {
         items.push({
           ...i,

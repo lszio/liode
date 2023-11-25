@@ -18,8 +18,8 @@ export const CreateItemPayload = CreateGroupPayload.omit({
   items: true,
 }).extend({
   name: z.string(),
-  with: z.array(z.string()),
-  detail: z.record(z.string(), z.any()),
+  tags: z.array(z.string()),
+  data: z.record(z.string(), z.any()),
 });
 
 export const CreatePayload =

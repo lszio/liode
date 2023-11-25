@@ -3,15 +3,15 @@ import { z } from "zod";
 export const Item = z
   .object({
     name: z.string(),
-    with: z.array(z.string()),
-    detail: z.record(z.string(), z.any()),
+    tags: z.array(z.string()),
+    data: z.record(z.string(), z.any()),
   })
   .passthrough();
 
 export type Item = z.infer<typeof Item>;
 
 export const SourceItem = Item.extend({
-  detail: z.object({
+  data: z.object({
     label: z.string().optional(),
     path: z.string(),
   }),

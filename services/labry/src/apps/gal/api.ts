@@ -4,7 +4,6 @@ import { fromSearchParams } from "./utils";
 
 export const GET: APIRoute = ({ request, url }) => {
   const params = fromSearchParams(url.searchParams);
-  console.log(params);
 
   if (params.refresh) {
     load();
