@@ -1,0 +1,8 @@
+---
+import App from "./view"
+import { fromSearchParams } from "./utils";
+
+const params = fromSearchParams(Astro.url.searchParams) as any
+---
+
+<App params={params} client:only="react" />

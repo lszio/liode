@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "ferld",
+  "name": "@ferld/parent",
   "version": "0.0.0",
   "description": "Liszt21's frontend project",
   "main": "index.js",
@@ -31,6 +31,6 @@
     "@ferld/eslint-config": "workspace:^",
     "@ferld/prettier-config": "workspace:^",
     "@ferld/ts-config": "workspace:^",
-    "turbo": "^1.10.13"
+    "turbo": "^1.10.16"
   }
 }

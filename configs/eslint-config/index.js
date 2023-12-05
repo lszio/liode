@@ -29,8 +29,8 @@ module.exports = {
 
     // WARNING
     "no-multiple-empty-lines": ["warn", { max: 1 }],
-    "arrow-parens": ["warn", "as-needed"],
-    "comma-dangle": ["warn", "never"],
+    // "arrow-parens": ["warn", "as-needed"],
+    // "comma-dangle": ["warn", "never"],
     "quotes": ["warn", "double"],
     "indent": ["warn", 2, { "SwitchCase": 1 }],
     "semi": ["warn", "always"],

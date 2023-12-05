@@ -4,16 +4,18 @@ import dts from "vite-plugin-dts";
 // https://vitejs.dev/config/
 export default defineConfig(() => {
   return {
-    resolve: {
-      alias: {}
-    },
     build: {
       lib: {
         entry: "src/index",
         name: "likit",
-        fileName: format => `likit.${format}.js`
-      }
+        fileName: (format) =>
+          format === "es" ? "index.js" : `index.${format}.js`,
+      },
     },
-    plugins: [dts()]
+    plugins: [
+      dts({
+        rollupTypes: true,
+      }),
+    ],
   };
 });
