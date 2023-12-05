@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "ferld",
+  "name": "@ferld/parent",
   "version": "0.0.0",
   "description": "Liszt21's frontend project",
   "main": "index.js",
