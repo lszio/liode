@@ -13,6 +13,7 @@
     "dev": "turbo run dev",
     "storybook": "pnpm --filter stories storybook"
   },
+  "workspaces": ["packages/*", "configs/*"],
   "keywords": [
     "react",
     "monorepo"
@@ -27,10 +28,10 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
-    "@ferld/config": "workspace:^",
-    "@ferld/eslint-config": "workspace:^",
-    "@ferld/prettier-config": "workspace:^",
-    "@ferld/ts-config": "workspace:^",
+    "@ferld/config": "workspace:*",
+    "@ferld/eslint-config": "workspace:*",
+    "@ferld/prettier-config": "workspace:*",
+    "@ferld/ts-config": "workspace:*",
     "turbo": "^1.10.16"
   }
 }
