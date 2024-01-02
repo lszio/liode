@@ -1,14 +1,14 @@
 import { useState, useEffect, useRef } from "react";
-import { Container, Box } from "./styles.css";
+// import { Container, Box } from "./styles.css";
 
 enum Phase {
   WAIT,
   PEND,
   REACT,
-  DONE
+  DONE,
 }
 
-export function ReactionSpeed({ style }: { style: React.CSSProperties }) {
+export function ReactionSpeed() {
   const [phase, setPhase] = useState(Phase.WAIT);
   const [time, setTime] = useState(+new Date());
   const [records, setRecords] = useState<Record<string, number>[]>([]);
@@ -16,12 +16,12 @@ export function ReactionSpeed({ style }: { style: React.CSSProperties }) {
   const phaseRef = useRef(phase);
   phaseRef.current = phase;
 
-  const classMapper = {
-    [Phase.WAIT]: "wait",
-    [Phase.PEND]: "pend",
-    [Phase.REACT]: "react",
-    [Phase.DONE]: "done"
-  };
+  // const classMapper = {
+  //   [Phase.WAIT]: "wait bg-blue",
+  //   [Phase.PEND]: "pend bg-red",
+  //   [Phase.REACT]: "react bg-yellow",
+  //   [Phase.DONE]: "done bg-green",
+  // };
 
   useEffect(() => {
     setContent(() => {
@@ -36,7 +36,7 @@ export function ReactionSpeed({ style }: { style: React.CSSProperties }) {
           return "Continue?";
       }
     });
-  });
+  }, [phase]);
 
   const doTest = () => {
     if (phaseRef.current === Phase.PEND) {
@@ -86,13 +86,31 @@ export function ReactionSpeed({ style }: { style: React.CSSProperties }) {
   };
 
   return (
-    <section className={Container} onClick={handleClickPadding} style={style}>
-      <div className={Box + " " + classMapper[phase]} onClick={handleClickBox}>
-        <span>
-          {content}
-        </span>
+    <section
+      className={
+        "flex text-center flex-col w-full h-full cursor-pointer justify-around"
+      }
+      onClick={handleClickPadding}
+    >
+      <div
+        className={
+          "mx-4 my-10% w-80% flex-1 bg-white rd-4 flex flex-col justify-around " +
+          // classMapper[phase]
+          (phase === Phase.REACT
+            ? "react bg-green"
+            : phase === Phase.PEND
+            ? "pend bg-yellow"
+            : phase === Phase.DONE
+            ? "done bg-red"
+            : "")
+        }
+        onClick={handleClickBox}
+      >
+        <span>{content}</span>
         <div>
-          {records.map(({ start, end }: Record<string, number>) => end - start + " ")}
+          {records.map(
+            ({ start, end }: Record<string, number>) => end - start + " "
+          )}
         </div>
       </div>
     </section>

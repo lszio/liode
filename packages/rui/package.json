@@ -44,8 +44,6 @@
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
-    "@vanilla-extract/css": "^1.14.0",
-    "@vanilla-extract/vite-plugin": "^3.9.0",
     "@vitejs/plugin-react": "^4.0.3",
     "eslint": "^8.45.0",
     "eslint-plugin-react-hooks": "^4.6.0",
@@ -55,6 +53,7 @@
     "react-dom": "^18.2.0",
     "storybook": "7.5.3",
     "typescript": "^5.0.2",
+    "unocss": "^0.58.3",
     "vite": "^4.4.5",
     "vite-plugin-dts": "^3.6.3"
   }
