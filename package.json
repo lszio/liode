@@ -18,5 +18,11 @@
     "type": "https",
     "ur": "https://github.com/lszio/inold"
   },
-  "workspaces": ["configs/*", "modules/*"]
+  "workspaces": [
+    "configs/*",
+    "modules/*"
+  ],
+  "devDependencies": {
+    "nx": "19.1.0"
+  }
 }
