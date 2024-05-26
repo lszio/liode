@@ -1,0 +1,17 @@
+{
+  "name": "broxy",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@effect/cli": "^0.36.35",
+    "@effect/platform-bun": "^0.36.0",
+    "@effect/platform-node": "^0.51.0",
+    "effect": "^3.2.5"
+  }
+}
