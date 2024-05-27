@@ -1,0 +1,6 @@
+{
+    "extends": [
+        // "@inold-config/biome",
+        "../../configs/biome/biome.json"
+    ]
+}

@@ -2,8 +2,13 @@
   "name": "broxy",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "build": "bun build src/ --outfile=./dist/broxy.mjs --target=node",
+    "format": "biome format src/ --write"
+  },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@inold-config/biome": "workspace:*"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
@@ -11,7 +16,6 @@
   "dependencies": {
     "@effect/cli": "^0.36.35",
     "@effect/platform-bun": "^0.36.0",
-    "@effect/platform-node": "^0.51.0",
     "effect": "^3.2.5"
   }
 }
