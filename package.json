@@ -1,5 +1,5 @@
 {
-  "name": "@inode/root",
+  "name": "@liode/root",
   "private": "true",
   "version": "0.0.0",
   "description": "lszio's node",
@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "https",
-    "ur": "https://github.com/lszio/inold"
+    "url": "https://github.com/lszio/liode"
   },
   "workspaces": [
     "configs/*",
@@ -24,5 +24,8 @@
   ],
   "devDependencies": {
     "nx": "19.1.0"
-  }
+  },
+  "trustedDependencies": [
+    "@biomejs/biome"
+  ]
 }

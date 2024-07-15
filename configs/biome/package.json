@@ -1,5 +1,5 @@
 {
-  "name": "@inold-config/biome",
+  "name": "@liode-config/biome",
   "devDependencies": {
     "@biomejs/biome": "^1.7.3",
     "@types/bun": "latest"

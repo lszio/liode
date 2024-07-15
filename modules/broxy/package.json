@@ -8,7 +8,7 @@
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "@inold-config/biome": "workspace:*"
+    "@liode-config/biome": "workspace:*"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"

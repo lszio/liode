@@ -1,4 +1,4 @@
-#+TITLE: INOLD
+#+TITLE: LIODE
 
 * configs
 * modules
