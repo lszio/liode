@@ -1,0 +1,20 @@
+{
+  "name": "@liode/kit",
+  "module": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "bun run build.ts",
+    "test": "bun test",
+    "lint": "biome lint src",
+    "format": "biome format src"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "bun-plugin-dts": "^0.2.3",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+  }
+}
