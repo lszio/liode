@@ -20,12 +20,14 @@
   },
   "workspaces": [
     "configs/*",
-    "modules/*"
+    "modules/*",
+    "services/*"
   ],
   "devDependencies": {
     "nx": "19.1.0"
   },
   "trustedDependencies": [
-    "@biomejs/biome"
+    "@biomejs/biome",
+    "nx"
   ]
 }

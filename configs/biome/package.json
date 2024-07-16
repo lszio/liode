@@ -1,5 +1,8 @@
 {
   "name": "@liode-config/biome",
+  "exports": {
+    ".": "./biome.json"
+  },
   "devDependencies": {
     "@biomejs/biome": "^1.7.3",
     "@types/bun": "latest"

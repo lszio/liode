@@ -1,3 +1,6 @@
 {
-    "extends": ["./formatter.json"]
+    "extends": ["./formatter.json", "./linter.json"],
+	"organizeImports": {
+		"enabled": true
+	}
 }
